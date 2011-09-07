@@ -8,10 +8,10 @@ import com.googlecode.objectify.ObjectifyFactory
  * @since 28.08.11
  * @author Igor Artamonov (http://igorartamonov.com)
  */
-class Groobian {
+class Groovify {
 
     void setModels(List<Class> models) {
-        GroobianBasicDsl basicDsl = new GroobianBasicDsl()
+        GroovifyBasicDsl basicDsl = new GroovifyBasicDsl()
         models.each {
             basicDsl.addCore(it)
         }

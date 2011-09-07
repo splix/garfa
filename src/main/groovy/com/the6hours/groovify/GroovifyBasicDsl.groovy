@@ -10,7 +10,7 @@ import com.googlecode.objectify.Query
  * @since 17.08.11
  * @author Igor Artamonov (http://igorartamonov.com)
  */
-class GroobianBasicDsl {
+class GroovifyBasicDsl {
 
     void addCore(Class dc) {
         def metaClass = dc.metaClass

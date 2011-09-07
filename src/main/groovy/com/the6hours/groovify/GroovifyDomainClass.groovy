@@ -6,5 +6,5 @@ package com.the6hours.groovify
  * @since 17.08.11
  * @author Igor Artamonov (http://igorartamonov.com)
  */
-class GroobianDomainClass {
+class GroovifyDomainClass {
 }
