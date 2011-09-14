@@ -54,14 +54,15 @@ class GroovifyBasicDsl {
 
         metaClass.'static'.get = { def id ->
             assert id != null
-            Key key = null
+            assert id instanceof Key || id instanceof String || id instanceof Long
             if (id instanceof Key) {
-                key = id
+                Holder.current.execute {
+                    delegate.get(id)
+                }
             } else {
-                key = new Key(dc, id)
-            }
-            Holder.current.execute {
-                delegate.get(key)
+                Holder.current.execute {
+                    delegate.get(dc, id)
+                }
             }
         }
 
