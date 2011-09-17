@@ -10,7 +10,7 @@ import com.googlecode.objectify.ObjectifyFactory
  */
 class Groovify {
 
-    void setModels(List<Class> models) {
+    void register(List<Class> models) {
         GroovifyBasicDsl basicDsl = new GroovifyBasicDsl()
         models.each {
             basicDsl.addCore(it)
