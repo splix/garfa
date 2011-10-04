@@ -39,11 +39,11 @@ Just init bean as follows:
 
 ```Groovy
 @Bean(name = "groovify")
-Groobian getGroobian() {
+Groovify getGroovify() {
     Groovify groovify = new Groovify()
-    groovify.models = [
+    groovify.register([
         Car
-    ]
+    ])
     groovify.objectifyFactory = getDbFactory()
     return groovify
 }
