@@ -52,7 +52,7 @@ Groovify getGroovify() {
 Documentation
 -------------
 
- * [Updates](docs/updates.markdown)
+ * [Updates](groovify-appengine/docs/updates.markdown)
 
 
 License
