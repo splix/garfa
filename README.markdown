@@ -27,7 +27,7 @@ car = new Car(
 car.save()
 
 //update (in transaction, tries 3 times)
-Car.update { Car curr -> //`curr` is a current object, loaded from DB
+car.update { Car curr -> //`curr` is a current object, loaded from DB
   curr.count++
 }
 ```
@@ -48,6 +48,11 @@ Groovify getGroovify() {
     return groovify
 }
 ```
+
+Documentation
+-------------
+
+ * [Updates](docs/updates.markdown)
 
 
 License
