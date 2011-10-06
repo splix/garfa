@@ -52,7 +52,8 @@ Groovify getGroovify() {
 Documentation
 -------------
 
- * [Updates](groovify-appengine/blob/master/docs/updates.markdown)
+ * [How to store / update data](groovify-appengine/blob/master/docs/updates.markdown)
+ * [How to load data from DB](groovify-appengine/blob/master/docs/querying.markdown)
 
 
 License
