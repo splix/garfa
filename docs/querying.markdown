@@ -20,3 +20,6 @@ Car car2 = Car.get(carKey)
 
 car = Car.load(id) //car can be null if there is no entity with id = 1
 ```
+
+Query
+-----
