@@ -10,11 +10,18 @@ import com.googlecode.objectify.ObjectifyFactory
  */
 class Groovify {
 
+    GroovifyBasicDsl basicDsl = new GroovifyBasicDsl()
+   GroovifyFindDsl  findDsl = new GroovifyFindDsl()
+
     void register(List<Class> models) {
-        GroovifyBasicDsl basicDsl = new GroovifyBasicDsl()
         models.each {
-            basicDsl.addCore(it)
+            register(it)
         }
+    }
+
+    void register(Class model) {
+        basicDsl.extend(model)
+        findDsl.extend(model)
     }
 
     void setObjectifyFactory(ObjectifyFactory ofy) {

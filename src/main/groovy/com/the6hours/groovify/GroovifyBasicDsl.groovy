@@ -12,7 +12,7 @@ import com.googlecode.objectify.Query
  */
 class GroovifyBasicDsl {
 
-    void addCore(Class dc) {
+    void extend(Class dc) {
         def metaClass = dc.metaClass
 
         metaClass.getKey = {->
