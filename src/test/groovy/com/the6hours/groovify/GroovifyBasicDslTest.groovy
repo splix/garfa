@@ -3,6 +3,7 @@ package com.the6hours.groovify
 import spock.lang.Specification
 import com.googlecode.objectify.ObjectifyFactory
 import com.the6hours.groovify.testmodels.Car
+import com.googlecode.objectify.NotFoundException
 
 /**
  * 
@@ -34,6 +35,43 @@ class GroovifyBasicDslTest extends Specification {
             car.save()
         then:
             car.id != null
+    }
 
+    def "Get car"() {
+        setup:
+            Car car = new Car(
+                    vendor: 'Vaz',
+                    model: '2101'
+            )
+            car.save()
+        when:
+            Car car2 = Car.get(car.id)
+        then:
+            car2 != null
+            car2.vendor == 'Vaz'
+            car2.model == '2101'
+        when:
+            Car car3 = Car.get(car.id + 1)
+        then:
+            thrown(NotFoundException)
+    }
+
+    def "Find car"() {
+        setup:
+            Car car = new Car(
+                    vendor: 'Vaz',
+                    model: '2101'
+            )
+            car.save()
+        when:
+            Car car2 = Car.find(car.id)
+        then:
+            car2 != null
+            car2.vendor == 'Vaz'
+            car2.model == '2101'
+        when:
+            Car car3 = Car.find(car.id + 1)
+        then:
+            car3 == null
     }
 }
