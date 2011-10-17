@@ -74,4 +74,22 @@ class GroovifyBasicDslTest extends Specification {
         then:
             car3 == null
     }
+
+    def "Update car"() {
+        setup:
+            Car car = new Car(
+                    vendor: 'Vaz',
+                    model: '2101'
+            )
+            car.save()
+        when:
+            Car car2 = Car.get(car.id)
+            car2.update { Car curr ->
+                curr.model = '2109'
+            }
+            Car car3 = Car.get(car.id)
+        then:
+            car3 != null
+            car3.model == '2109'
+    }
 }
