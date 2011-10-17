@@ -36,6 +36,9 @@ class GroovifyFindDsl {
         metaClass.'static'.findWhere = { Map query, Map params, Closure block ->
             return delegate.iterWhere(query, params, block).toList()
         }
+        metaClass.'static'.findWhere = { Map query, Map params ->
+            return delegate.findWhere(query, params, null)
+        }
         metaClass.'static'.findWhere = { Map query ->
             return delegate.findWhere(query, null, null)
         }

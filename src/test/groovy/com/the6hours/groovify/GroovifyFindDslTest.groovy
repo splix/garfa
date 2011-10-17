@@ -21,17 +21,17 @@ class GroovifyFindDslTest extends Specification {
              ofy.register(it)
              groovify.register(it)
         }
+
+        ['2101', '2106', '2108'].each {
+            Car car = new Car(
+                    vendor: 'Vaz',
+                    model: it
+            )
+            car.save()
+        }
     }
 
     def "Basic find"() {
-        setup:
-            ['2101', '2106', '2108'].each {
-                Car car = new Car(
-                        vendor: 'Vaz',
-                        model: it
-                )
-                car.save()
-            }
         when:
             List cars = Car.findWhere(['model': '2101'])
         then:
@@ -39,5 +39,14 @@ class GroovifyFindDslTest extends Specification {
             cars.size() == 1
             cars[0].model == '2101'
     }
+
+    def "Using limit"() {
+        when:
+            List cars = Car.findWhere(['vendor': 'Vaz'], [limit: 2])
+        then:
+            cars != null
+            cars.size() == 2
+    }
+
 
 }
