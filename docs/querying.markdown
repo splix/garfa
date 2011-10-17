@@ -5,6 +5,7 @@ Get item by ID
 --------------
 
 There is two method for loading data from database:
+
  * .get(id or key)
  * .load(id or key)
 
@@ -25,6 +26,7 @@ Query
 -----
 
 You have direct access to Objectify's Query, by using two following methods:
+
  * .findFirst {}
  * .findAll {}
 
@@ -32,6 +34,7 @@ where you can pass the code that can modify any options of passed Query object. 
 it's no a passed parameter, your code will operates directly against query instance, as an DSL.
 
 For example:
+
 ```Groovy
 Car.findAll {
   filter('vendor =', 'Ford')
@@ -43,6 +46,7 @@ Find Where
 ----------
 
 There is an another method for querying:
+
 ```Groovy
 Clazz.findWhere([<fields>], [<params>]) {
   // code executed against Query
@@ -59,6 +63,7 @@ where:
     prepared Query. Like `Car.findWhere([], []) { limit(5) }` (btw, it's the same as `.findWhere([], [limit: 5])`)
 
 For example:
+
 ```Groovy
 //get maximum 20 cars where count > 10, ordered by count field, descending
 List cars = Car.findWhere(['count >': 10], [order: '-count', limit: 20])
