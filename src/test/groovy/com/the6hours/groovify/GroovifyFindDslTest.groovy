@@ -22,10 +22,11 @@ class GroovifyFindDslTest extends Specification {
              groovify.register(it)
         }
 
-        ['2101', '2106', '2108'].each {
+        ['2101', '2106', '2108', '2109'].eachWithIndex { String it, int idx ->
             Car car = new Car(
                     vendor: 'Vaz',
-                    model: it
+                    model: it,
+                    count: idx
             )
             car.save()
         }
@@ -48,5 +49,22 @@ class GroovifyFindDslTest extends Specification {
             cars.size() == 2
     }
 
+    def "Find greater than"() {
+        when:
+            List cars = Car.findWhere(['count >': 2])
+        then:
+            cars != null
+            cars.size() == 1
+            cars[0].model == '2109'
+    }
 
+    def "Find greater or equal than"() {
+        when:
+            List cars = Car.findWhere(['count >=': 2])
+        then:
+            cars != null
+            cars.size() == 2
+            cars[0].model == '2108'
+            cars[1].model == '2109'
+    }
 }
