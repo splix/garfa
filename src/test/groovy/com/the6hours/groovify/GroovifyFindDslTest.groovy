@@ -67,4 +67,21 @@ class GroovifyFindDslTest extends Specification {
             cars[0].model == '2108'
             cars[1].model == '2109'
     }
+
+    def "Find greater or equal than w order"() {
+        when:
+            List cars = Car.findWhere(['count >=': 2], [order: '-count'])
+        then:
+            cars != null
+            cars.size() == 2
+            cars[0].model == '2109'
+            cars[1].model == '2108'
+        when:
+            cars = Car.findWhere(['count >=': 2], [order: 'count'])
+        then:
+            cars != null
+            cars.size() == 2
+            cars[0].model == '2108'
+            cars[1].model == '2109'
+    }
 }

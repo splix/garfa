@@ -19,6 +19,9 @@ class GroovifyFindDsl {
                 if (params?.limit) {
                     q.limit(params.limit)
                 }
+                if (params?.order) {
+                    q.order(params.order)
+                }
                 query.entrySet().each { Map.Entry where ->
                     String field = where.key
                     if (field.indexOf(' ') < 0) {
