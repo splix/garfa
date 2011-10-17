@@ -56,7 +56,7 @@ class GroovifyBasicDslTest extends Specification {
             thrown(NotFoundException)
     }
 
-    def "Find car"() {
+    def "Load car"() {
         setup:
             Car car = new Car(
                     vendor: 'Vaz',
@@ -64,13 +64,13 @@ class GroovifyBasicDslTest extends Specification {
             )
             car.save()
         when:
-            Car car2 = Car.find(car.id)
+            Car car2 = Car.load(car.id)
         then:
             car2 != null
             car2.vendor == 'Vaz'
             car2.model == '2101'
         when:
-            Car car3 = Car.find(car.id + 1)
+            Car car3 = Car.load(car.id + 1)
         then:
             car3 == null
     }

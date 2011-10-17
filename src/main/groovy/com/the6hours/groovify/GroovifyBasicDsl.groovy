@@ -66,7 +66,7 @@ class GroovifyBasicDsl {
             }
         }
 
-        metaClass.'static'.find = { def id ->
+        metaClass.'static'.load = { def id ->
             Key key = null
             if (id instanceof Key) {
                 key = id
