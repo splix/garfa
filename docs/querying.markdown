@@ -24,7 +24,7 @@ car = Car.load(id) //car can be null if there is no entity with id = 1
 Query
 -----
 
-YOu have direct access to Objectify's Query, by using two following methods:
+You have direct access to Objectify's Query, by using two following methods:
  * .findFirst {}
  * .findAll {}
 
@@ -37,4 +37,29 @@ Car.findAll {
   filter('vendor =', 'Ford')
   limit(10)
 }
+```
+
+Find Where
+----------
+
+There is an another method for querying:
+```Groovy
+Clazz.findWhere([<fields>], [<params>]) {
+  // code executed against Query
+}
+```
+
+where:
+
+ * fields - list of field filters, where keys is or simple field names (that mean equality filter), or string
+    as fieldname + operator. Like: `[model: 'Ford']` or `['model =': 'Ford']` or `['count >': 5]`. First two are
+    equal filters
+ * optional query parameters - like `[limit: 4]` or `[order: '-count']`
+ * closure - more flexibility when you need something specific. It's your code block that will be executed against
+    prepared Query. Like `Car.findWhere([], []) { limit(5) }` (btw, it's the same as `.findWhere([], [limit: 5])`)
+
+For example:
+```Groovy
+//get maximum 20 cars where count > 10, ordered by count field, descending
+List cars = Car.findWhere(['count >': 10], [order: '-count', limit: 20])
 ```
