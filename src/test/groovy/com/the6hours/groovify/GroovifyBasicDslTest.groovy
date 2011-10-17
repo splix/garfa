@@ -92,4 +92,28 @@ class GroovifyBasicDslTest extends Specification {
             car3 != null
             car3.model == '2109'
     }
+
+    def "Find first"() {
+        setup:
+            Car car = new Car(
+                    vendor: 'Vaz',
+                    model: '2101'
+            )
+            car.save()
+            Car car2 = new Car(
+                    vendor: 'Vaz',
+                    model: '2109'
+            )
+            car2.save()
+            Car car3 = new Car(
+                    vendor: 'Ford',
+                    model: 'Mustang'
+            )
+            car3.save()
+        when:
+            Car found = Car.findFirst { filter('vendor =', 'Vaz') }
+        then:
+            found != null
+            found.id == car.id
+    }
 }
