@@ -23,3 +23,18 @@ car = Car.load(id) //car can be null if there is no entity with id = 1
 
 Query
 -----
+
+YOu have direct access to Objectify's Query, by using two following methods:
+ * .findFirst {}
+ * .findAll {}
+
+where you can pass the code that can modify any options of passed Query object. Please notice, that query instance,
+it's no a passed parameter, your code will operates directly against query instance, as an DSL.
+
+For example:
+```Groovy
+Car.findAll {
+  filter('vendor =', 'Ford')
+  limit(10)
+}
+```
