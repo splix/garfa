@@ -116,4 +116,36 @@ class GroovifyBasicDslTest extends Specification {
             found != null
             found.id == car.id
     }
+
+    def "Find all"() {
+        setup:
+            Car car = new Car(
+                    vendor: 'Vaz',
+                    model: '2101'
+            )
+            car.save()
+            Car car2 = new Car(
+                    vendor: 'Vaz',
+                    model: '2109'
+            )
+            car2.save()
+            Car car3 = new Car(
+                    vendor: 'Ford',
+                    model: 'Mustang'
+            )
+            car3.save()
+        when:
+            List found = Car.findAll { filter('vendor =', 'Vaz') }
+        then:
+            found != null
+            found.size() == 2
+            found.collect { it.id }.sort() == [car.id, car2.id].sort()
+        when:
+            found = Car.findAll { filter('vendor =', 'Ford') }
+        then:
+            found != null
+            found.size() == 1
+            found[0].id == car3.id
+    }
+
 }
