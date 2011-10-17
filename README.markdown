@@ -4,6 +4,7 @@ Groovify - Groovy flavour to Objectify
 Groovify-Appengine - ActiveRecord for your data models
 
 It's:
+
  * for Google Appengine
  * based on Objectify
  * for Groovy projects
@@ -12,7 +13,7 @@ It's:
 Groovify will automatically add methods for querying, storing, updating into
   your existing Java/Groovy classes
 
-Latest version: 0.2-SNAPSHOT
+Latest version: 0.3-SNAPSHOT
 
 Examples
 --------
