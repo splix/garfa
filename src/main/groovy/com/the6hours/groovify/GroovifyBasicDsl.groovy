@@ -3,6 +3,8 @@ package com.the6hours.groovify
 import com.googlecode.objectify.Objectify
 import com.googlecode.objectify.Key
 import com.googlecode.objectify.Query
+import org.slf4j.LoggerFactory
+import org.slf4j.Logger
 
 /**
  * TODO
@@ -12,11 +14,17 @@ import com.googlecode.objectify.Query
  */
 class GroovifyBasicDsl {
 
+    private static final Logger log = LoggerFactory.getLogger(this)
+
     void extend(Class dc) {
         def metaClass = dc.metaClass
 
-        metaClass.getKey = {->
-            return new Key(dc, delegate.id)
+        if (dc.declaredMethods.find { it.name == 'getKey' }) {
+            log.info("Class $dc already contains .getKey() method")
+        } else {
+            metaClass.getKey = {->
+                return new Key(dc, delegate.id)
+            }
         }
 
         metaClass.save = {->
