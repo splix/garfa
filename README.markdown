@@ -1,7 +1,7 @@
 Groovify - Groovy flavour to Objectify
 ==========================================================
 
-Groovify-Appengine - ActiveRecord for your data models
+Groovify-Appengine - ActiveRecord for your GAE data models, based on Objectify
 
 It's:
 
@@ -41,6 +41,28 @@ car.update { Car curr -> //`curr` is a current object, loaded from DB
   curr.count++
 }
 ```
+
+Maven dependency
+----------------
+
+```xml
+<dependency>
+    <groupId>com.the6hours</groupId>
+    <artifactId>groovify-appengine</artifactId>
+    <version>0.4-SNAPSHOT</version>
+</dependency>
+```
+
+```xml
+<repositories>
+    <repository>
+        <id>sonatype-snapshots</id>
+        <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        <snapshots><enabled>true</enabled></snapshots>
+    </repository>
+</repositories>
+```
+
 
 How to use
 ----------
