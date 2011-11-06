@@ -40,6 +40,7 @@ class GroovifyBasicDsl {
             boolean saved = false
             Exception error = null
             Key key = obj.key
+            def updated = null
             while (!saved && tries > 0) {
                 saved = (Boolean)Holder.current.inTransaction {
                     tries--
@@ -48,6 +49,7 @@ class GroovifyBasicDsl {
                     block.call(stored)
                     try {
                         delegate.put(stored)
+                        updated = stored
                         return true
                     } catch (Exception e) {
                         error = e
@@ -58,6 +60,7 @@ class GroovifyBasicDsl {
             if (!saved && error != null) {
                 throw error
             }
+            return updated
         }
 
         metaClass.'static'.get = { def id ->
