@@ -46,5 +46,18 @@ class GroovifyFindDsl {
             return delegate.findWhere(query, null, null)
         }
 
+        metaClass.'static'.findFirstWhere = { Map query, Map params, Closure block ->
+            Iterator iter = delegate.iterWhere(query, params, block)
+            if (iter.hasNext()) {
+                return iter.next()
+            }
+            return null
+        }
+        metaClass.'static'.findFirstWhere = { Map query, Map params ->
+            return delegate.findFirstWhere(query, params, null)
+        }
+        metaClass.'static'.findFirstWhere = { Map query ->
+            return delegate.findFirstWhere(query, null, null)
+        }
     }
 }
