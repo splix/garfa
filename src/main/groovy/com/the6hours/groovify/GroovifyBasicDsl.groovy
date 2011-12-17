@@ -34,9 +34,14 @@ class GroovifyBasicDsl {
             }
         }
 
+        metaClass.'static'.update = { def id, Closure block ->
+            def obj = delegate.get(id)
+            obj.update(block)
+        }
+
         metaClass.update = { Closure block ->
             def obj = delegate
-            int tries = 3 //TODO configurable
+            int tries = 3 //TODO make it configurable
             boolean saved = false
             Exception error = null
             Key key = obj.key
@@ -59,6 +64,9 @@ class GroovifyBasicDsl {
             }
             if (!saved && error != null) {
                 throw error
+            }
+            if (!saved) {
+                return null
             }
             return updated
         }
