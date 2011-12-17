@@ -39,7 +39,7 @@
     </parent>
 
     <properties>
-        <gae.version>1.4.3</gae.version>
+        <gae.version>1.6.0</gae.version>
         <gae.wait>true</gae.wait>
         <slf4j>1.5.8</slf4j>
         <gmaven.version>1.3</gmaven.version>
@@ -57,7 +57,7 @@
         <dependency>
             <groupId>com.googlecode.objectify</groupId>
             <artifactId>objectify</artifactId>
-            <version>3.0</version>
+            <version>3.1</version>
         </dependency>
 
         <dependency>

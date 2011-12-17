@@ -56,6 +56,30 @@ class GroovifyBasicDslTest extends Specification {
             thrown(NotFoundException)
     }
 
+    def "Get cars list"() {
+        setup:
+            Car car = new Car(
+                    vendor: 'Vaz',
+                    model: '2101'
+            )
+            car.save()
+            Car car2 = new Car(
+                    vendor: 'Vaz',
+                    model: '2102'
+            )
+            car2.save()
+            Car car3 = new Car(
+                    vendor: 'Vaz',
+                    model: '2105'
+            )
+            car3.save()
+        when:
+            List<Car> cars = Car.get([car.key, car2.key, car3.key])
+        then:
+            cars != null
+            cars.size() == 3
+            cars*.model == ['2101', '2102', '2105']
+    }
     def "Load car"() {
         setup:
             Car car = new Car(

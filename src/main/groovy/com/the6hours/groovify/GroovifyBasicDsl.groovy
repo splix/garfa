@@ -73,11 +73,16 @@ class GroovifyBasicDsl {
 
         metaClass.'static'.get = { def id ->
             assert id != null
-            assert id instanceof Key || id instanceof String || id instanceof Long
+            assert id instanceof Key || id instanceof String || id instanceof Long || id instanceof Iterable
             if (id instanceof Key) {
                 Holder.current.execute {
                     delegate.get(id)
                 }
+            } else if (id instanceof Iterable) {
+                Map loaded = Holder.current.execute {
+                    delegate.get(id)
+                }
+                return id.collect { loaded[it] }
             } else {
                 Holder.current.execute {
                     delegate.get(dc, id)
