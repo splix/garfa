@@ -6,7 +6,7 @@
     <packaging>jar</packaging>
     <version>0.4-SNAPSHOT</version>
     <name>Groovify Appengine</name>
-    <url>https://github.com/the6hours/groovify-appengine</url>
+    <url>https://github.com/splix/groovify-appengine</url>
 
     <description>
         ActiveRecord for your GAE data models, based on Objectify
@@ -20,8 +20,8 @@
     </licenses>
 
     <scm>
-        <url>git@github.com:the6hours/groovify-appengine.git</url>
-        <connection>scm:git:git@github.com:the6hours/groovify-appengine.git</connection>
+        <url>git@github.com:splix/groovify-appengine.git</url>
+        <connection>scm:git:git@github.com:splix/groovify-appengine.git</connection>
     </scm>
 
     <developers>
