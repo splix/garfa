@@ -80,6 +80,7 @@ class GroovifyBasicDslTest extends Specification {
             cars.size() == 3
             cars*.model == ['2101', '2102', '2105']
     }
+
     def "Load car"() {
         setup:
             Car car = new Car(
@@ -97,6 +98,32 @@ class GroovifyBasicDslTest extends Specification {
             Car car3 = Car.load(car.id + 1)
         then:
             car3 == null
+    }
+
+    def "Load cars list"() {
+        setup:
+            Car car = new Car(
+                    vendor: 'Vaz',
+                    model: '2101'
+            )
+            car.save()
+            Car car2 = new Car(
+                    vendor: 'Vaz',
+                    model: '2102'
+            )
+            car2.save()
+            Car car3 = new Car(
+                    vendor: 'Vaz',
+                    model: '2105'
+            )
+            car3.save()
+            car2.delete()
+        when:
+            List<Car> cars = Car.load([car.key, car2.key, car3.key])
+        then:
+            cars != null
+            cars.size() == 3
+            cars*.model == ['2101', null, '2105']
     }
 
     def "Update car"() {

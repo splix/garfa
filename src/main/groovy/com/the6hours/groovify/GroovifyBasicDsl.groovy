@@ -34,6 +34,13 @@ class GroovifyBasicDsl {
             }
         }
 
+        metaClass.delete = {->
+            def obj = delegate
+            Holder.current.execute {
+                delete(obj)
+            }
+        }
+
         metaClass.'static'.update = { def id, Closure block ->
             def obj = delegate.get(id)
             obj.update(block)
@@ -91,14 +98,18 @@ class GroovifyBasicDsl {
         }
 
         metaClass.'static'.load = { def id ->
-            Key key = null
+            assert id != null
+            assert id instanceof Key || id instanceof String || id instanceof Long || id instanceof Iterable
             if (id instanceof Key) {
-                key = id
+                Holder.current.execute {
+                    delegate.find(id)
+                }
+            } else if (id instanceof Iterable) {
+                return delegate.get(id)
             } else {
-                key = new Key(dc, id)
-            }
-            Holder.current.execute {
-                delegate.find(key)
+                Holder.current.execute {
+                    delegate.find(dc, id)
+                }
             }
         }
 
