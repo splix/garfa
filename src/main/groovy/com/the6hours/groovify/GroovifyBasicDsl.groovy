@@ -79,7 +79,7 @@ class GroovifyBasicDsl {
         }
 
         metaClass.'static'.get = { def id ->
-            assert id != null
+            assert id != null : "ID cannot be null"
             assert id instanceof Key || id instanceof String || id instanceof Long || id instanceof Iterable
             if (id instanceof Key) {
                 Holder.current.execute {
@@ -98,7 +98,9 @@ class GroovifyBasicDsl {
         }
 
         metaClass.'static'.load = { def id ->
-            assert id != null
+            if (id == null) {
+                return null
+            }
             assert id instanceof Key || id instanceof String || id instanceof Long || id instanceof Iterable
             if (id instanceof Key) {
                 Holder.current.execute {
