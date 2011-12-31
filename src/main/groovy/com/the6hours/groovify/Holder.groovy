@@ -2,6 +2,7 @@ package com.the6hours.groovify
 
 import com.googlecode.objectify.Objectify
 import com.googlecode.objectify.ObjectifyFactory
+import com.googlecode.objectify.ObjectifyOpts
 
 /**
  * TODO
@@ -37,7 +38,11 @@ class Holder {
     }
 
     def inTransaction(Closure block) {
-        Objectify ob = objectifyFactory.beginTransaction()
+        ObjectifyOpts opts = new ObjectifyOpts()
+        opts.sessionCache = false
+        opts.globalCache = false
+        opts.beginTransaction = true
+        Objectify ob = objectifyFactory.begin(opts)
         block.delegate = ob
         try {
             def x = block.call()
