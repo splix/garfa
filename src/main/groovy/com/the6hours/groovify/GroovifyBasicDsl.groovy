@@ -54,8 +54,8 @@ class GroovifyBasicDsl {
             Key key = obj.key
             def updated = null
             while (!saved && tries > 0) {
+                tries--
                 saved = (Boolean)Holder.current.inTransaction {
-                    tries--
                     Object stored = delegate.get(key)
                     block.delegate = stored
                     block.call(stored)
