@@ -40,7 +40,7 @@ class Holder {
     def inTransaction(Closure block) {
         ObjectifyOpts opts = new ObjectifyOpts()
         opts.sessionCache = false
-        opts.globalCache = false
+        opts.globalCache = true //used only for cleanup cached data
         opts.beginTransaction = true
         Objectify ob = objectifyFactory.begin(opts)
         block.delegate = ob
