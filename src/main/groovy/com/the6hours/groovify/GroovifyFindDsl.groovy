@@ -59,5 +59,23 @@ class GroovifyFindDsl {
         metaClass.'static'.findFirstWhere = { Map query ->
             return delegate.findFirstWhere(query, null, null)
         }
+
+        metaClass.'static'.findByAncestor = { Object key ->
+            return delegate.findByAncestor(key, null)
+        }
+        metaClass.'static'.findByAncestor = { Object key, Map params ->
+            Holder.current.execute {
+                Objectify ob = delegate
+                Query q = ob.query(dc)
+                if (params?.limit) {
+                    q.limit(params.limit)
+                }
+                if (params?.order) {
+                    q.order(params.order)
+                }
+                q.ancestor(key)
+                return q.fetch().iterator().toList()
+            }
+        }
     }
 }
