@@ -1,8 +1,8 @@
 package com.the6hours.groovify
 
-import com.the6hours.groovify.testmodels.Car
 import com.googlecode.objectify.ObjectifyFactory
 import spock.lang.Specification
+import com.the6hours.groovify.testmodels.CarModel
 
 /**
  * 
@@ -17,16 +17,16 @@ class GroovifyFindDslTest extends Specification {
         Groovify groovify = new Groovify(
                 objectifyFactory: ofy
         )
-        [Car].each {
+        [CarModel].each {
              ofy.register(it)
              groovify.register(it)
         }
 
         ['2101', '2106', '2108', '2109'].eachWithIndex { String it, int idx ->
-            Car car = new Car(
+            CarModel car = new CarModel(
                     vendor: 'Vaz',
                     model: it,
-                    count: idx
+                    year: 2000 + idx
             )
             car.save()
         }
@@ -34,7 +34,7 @@ class GroovifyFindDslTest extends Specification {
 
     def "Basic find"() {
         when:
-            List cars = Car.findWhere(['model': '2101'])
+            List cars = CarModel.findWhere(['model': '2101'])
         then:
             cars != null
             cars.size() == 1
@@ -43,7 +43,7 @@ class GroovifyFindDslTest extends Specification {
 
     def "Using limit"() {
         when:
-            List cars = Car.findWhere(['vendor': 'Vaz'], [limit: 2])
+            List cars = CarModel.findWhere(['vendor': 'Vaz'], [limit: 2])
         then:
             cars != null
             cars.size() == 2
@@ -51,7 +51,7 @@ class GroovifyFindDslTest extends Specification {
 
     def "Find greater than"() {
         when:
-            List cars = Car.findWhere(['count >': 2])
+            List cars = CarModel.findWhere(['year >': 2002])
         then:
             cars != null
             cars.size() == 1
@@ -60,7 +60,7 @@ class GroovifyFindDslTest extends Specification {
 
     def "Find greater or equal than"() {
         when:
-            List cars = Car.findWhere(['count >=': 2])
+            List cars = CarModel.findWhere(['year >=': 2002])
         then:
             cars != null
             cars.size() == 2
@@ -70,14 +70,14 @@ class GroovifyFindDslTest extends Specification {
 
     def "Find greater or equal than w order"() {
         when:
-            List cars = Car.findWhere(['count >=': 2], [order: '-count'])
+            List cars = CarModel.findWhere(['year >=': 2002], [order: '-year'])
         then:
             cars != null
             cars.size() == 2
             cars[0].model == '2109'
             cars[1].model == '2108'
         when:
-            cars = Car.findWhere(['count >=': 2], [order: 'count'])
+            cars = CarModel.findWhere(['year >=': 2002], [order: 'year'])
         then:
             cars != null
             cars.size() == 2

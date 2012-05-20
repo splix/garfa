@@ -5,6 +5,8 @@ import com.googlecode.objectify.Key
 import com.googlecode.objectify.Query
 import org.slf4j.LoggerFactory
 import org.slf4j.Logger
+import java.lang.reflect.Field
+import com.googlecode.objectify.annotation.Parent
 
 /**
  * TODO
@@ -22,8 +24,20 @@ class GroovifyBasicDsl {
         if (dc.declaredMethods.find { it.name == 'getKey' }) {
             log.info("Class $dc already contains .getKey() method")
         } else {
-            metaClass.getKey = {->
-                return new Key(dc, delegate.id)
+            Field parent = dc.declaredFields.find { f ->
+                f.declaredAnnotations.find { a ->
+                    a.annotationType() == Parent
+                } != null
+            }
+            if (parent) {
+                String parentField = parent.name
+                metaClass.getKey = {->
+                    return new Key(delegate.getAt(parentField), dc, delegate.id)
+                }
+            } else {
+                metaClass.getKey = {->
+                    return new Key(dc, delegate.id)
+                }
             }
         }
 

@@ -1,20 +1,22 @@
 package com.the6hours.groovify.testmodels
 
+import com.googlecode.objectify.annotation.Parent
 import javax.persistence.Id
+import com.googlecode.objectify.Key
 
 /**
  * 
  * @author Igor Artamonov (http://igorartamonov.com)
- * @since 10.10.11
+ * @since 20.05.12
  */
 class Car {
 
     @Id
     Long id
+    @Parent
+    Key<CarModel> model
 
-    String vendor
-    String model
-    int year
-    int count
+    int price
+    String color
 
 }

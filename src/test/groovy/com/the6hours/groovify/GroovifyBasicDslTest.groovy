@@ -2,8 +2,10 @@ package com.the6hours.groovify
 
 import spock.lang.Specification
 import com.googlecode.objectify.ObjectifyFactory
-import com.the6hours.groovify.testmodels.Car
+import com.the6hours.groovify.testmodels.CarModel
 import com.googlecode.objectify.NotFoundException
+import com.the6hours.groovify.testmodels.Car
+import com.googlecode.objectify.Key
 
 /**
  * 
@@ -18,7 +20,7 @@ class GroovifyBasicDslTest extends Specification {
         Groovify groovify = new Groovify(
                 objectifyFactory: ofy
         )
-        [Car].each {
+        [CarModel, Car].each {
              ofy.register(it)
              groovify.register(it)
         }
@@ -27,7 +29,7 @@ class GroovifyBasicDslTest extends Specification {
 
     def "Save car"() {
         setup:
-            Car car = new Car(
+            CarModel car = new CarModel(
                     vendor: 'Vaz',
                     model: '2101'
             )
@@ -39,42 +41,42 @@ class GroovifyBasicDslTest extends Specification {
 
     def "Get car"() {
         setup:
-            Car car = new Car(
+            CarModel car = new CarModel(
                     vendor: 'Vaz',
                     model: '2101'
             )
             car.save()
         when:
-            Car car2 = Car.get(car.id)
+            CarModel car2 = CarModel.get(car.id)
         then:
             car2 != null
             car2.vendor == 'Vaz'
             car2.model == '2101'
         when:
-            Car car3 = Car.get(car.id + 1)
+            CarModel car3 = CarModel.get(car.id + 1)
         then:
             thrown(NotFoundException)
     }
 
     def "Get cars list"() {
         setup:
-            Car car = new Car(
+            CarModel car = new CarModel(
                     vendor: 'Vaz',
                     model: '2101'
             )
             car.save()
-            Car car2 = new Car(
+            CarModel car2 = new CarModel(
                     vendor: 'Vaz',
                     model: '2102'
             )
             car2.save()
-            Car car3 = new Car(
+            CarModel car3 = new CarModel(
                     vendor: 'Vaz',
                     model: '2105'
             )
             car3.save()
         when:
-            List<Car> cars = Car.get([car.key, car2.key, car3.key])
+            List<CarModel> cars = CarModel.get([car.key, car2.key, car3.key])
         then:
             cars != null
             cars.size() == 3
@@ -83,43 +85,43 @@ class GroovifyBasicDslTest extends Specification {
 
     def "Load car"() {
         setup:
-            Car car = new Car(
+            CarModel car = new CarModel(
                     vendor: 'Vaz',
                     model: '2101'
             )
             car.save()
         when:
-            Car car2 = Car.load(car.id)
+            CarModel car2 = CarModel.load(car.id)
         then:
             car2 != null
             car2.vendor == 'Vaz'
             car2.model == '2101'
         when:
-            Car car3 = Car.load(car.id + 1)
+            CarModel car3 = CarModel.load(car.id + 1)
         then:
             car3 == null
     }
 
     def "Load cars list"() {
         setup:
-            Car car = new Car(
+            CarModel car = new CarModel(
                     vendor: 'Vaz',
                     model: '2101'
             )
             car.save()
-            Car car2 = new Car(
+            CarModel car2 = new CarModel(
                     vendor: 'Vaz',
                     model: '2102'
             )
             car2.save()
-            Car car3 = new Car(
+            CarModel car3 = new CarModel(
                     vendor: 'Vaz',
                     model: '2105'
             )
             car3.save()
             car2.delete()
         when:
-            List<Car> cars = Car.load([car.key, car2.key, car3.key])
+            List<CarModel> cars = CarModel.load([car.key, car2.key, car3.key])
         then:
             cars != null
             cars.size() == 3
@@ -128,17 +130,17 @@ class GroovifyBasicDslTest extends Specification {
 
     def "Update car"() {
         setup:
-            Car car = new Car(
+            CarModel car = new CarModel(
                     vendor: 'Vaz',
                     model: '2101'
             )
             car.save()
         when:
-            Car car2 = Car.get(car.id)
-            car2.update { Car curr ->
+            CarModel car2 = CarModel.get(car.id)
+            car2.update { CarModel curr ->
                 curr.model = '2109'
             }
-            Car car3 = Car.get(car.id)
+            CarModel car3 = CarModel.get(car.id)
         then:
             car3 != null
             car3.model == '2109'
@@ -146,23 +148,23 @@ class GroovifyBasicDslTest extends Specification {
 
     def "Find first"() {
         setup:
-            Car car = new Car(
+            CarModel car = new CarModel(
                     vendor: 'Vaz',
                     model: '2101'
             )
             car.save()
-            Car car2 = new Car(
+            CarModel car2 = new CarModel(
                     vendor: 'Vaz',
                     model: '2109'
             )
             car2.save()
-            Car car3 = new Car(
+            CarModel car3 = new CarModel(
                     vendor: 'Ford',
                     model: 'Mustang'
             )
             car3.save()
         when:
-            Car found = Car.findFirst { filter('vendor =', 'Vaz') }
+            CarModel found = CarModel.findFirst { filter('vendor =', 'Vaz') }
         then:
             found != null
             found.id == car.id
@@ -170,33 +172,58 @@ class GroovifyBasicDslTest extends Specification {
 
     def "Find all"() {
         setup:
-            Car car = new Car(
+            CarModel car = new CarModel(
                     vendor: 'Vaz',
                     model: '2101'
             )
             car.save()
-            Car car2 = new Car(
+            CarModel car2 = new CarModel(
                     vendor: 'Vaz',
                     model: '2109'
             )
             car2.save()
-            Car car3 = new Car(
+            CarModel car3 = new CarModel(
                     vendor: 'Ford',
                     model: 'Mustang'
             )
             car3.save()
         when:
-            List found = Car.findAll { filter('vendor =', 'Vaz') }
+            List found = CarModel.findAll { filter('vendor =', 'Vaz') }
         then:
             found != null
             found.size() == 2
             found.collect { it.id }.sort() == [car.id, car2.id].sort()
         when:
-            found = Car.findAll { filter('vendor =', 'Ford') }
+            found = CarModel.findAll { filter('vendor =', 'Ford') }
         then:
             found != null
             found.size() == 1
             found[0].id == car3.id
     }
 
+    def "Create key for child model"() {
+        setup:
+            CarModel model = new CarModel(
+                    vendor: 'Vaz',
+                    model: '2101'
+            )
+            model.save()
+            Car car1 = new Car(
+                    model: model.key,
+                    price: 100
+            )
+            car1.save()
+            Car car2 = new Car(
+                    model: model.key,
+                    price: 120
+            )
+            car2.save()
+        when:
+            Key key1 = car1.key
+            Key modelKey = model.key
+        then:
+            key1.kind == 'Car'
+            key1.parent == modelKey
+            modelKey.parent == null
+    }
 }
