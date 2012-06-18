@@ -13,7 +13,7 @@ It's:
 Groovify will automatically add methods for querying, storing, updating into
   your existing Java/Groovy classes
 
-Latest version: 0.3-SNAPSHOT
+Latest version: 0.4
 
 Examples
 --------
@@ -87,6 +87,11 @@ Documentation
  * [How to store / update data](groovify-appengine/blob/master/docs/updates.markdown)
  * [How to load data from DB](groovify-appengine/blob/master/docs/querying.markdown)
 
+Roadmap
+-------------
+
+ * dynamic finders `Car.findByBrand('Ford')`
+ * DSL description for Intellij IDEA
 
 License
 -------
