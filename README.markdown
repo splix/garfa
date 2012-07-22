@@ -13,7 +13,8 @@ It's:
 Groovify will automatically add methods for querying, storing, updating into
   your existing Java/Groovy classes
 
-Latest version: 0.4
+Latest stable version: 0.4
+Latest development version: 0.5-SNAPSHOT
 
 Examples
 --------
