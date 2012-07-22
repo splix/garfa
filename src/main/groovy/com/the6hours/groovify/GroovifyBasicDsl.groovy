@@ -92,6 +92,24 @@ class GroovifyBasicDsl {
             return updated
         }
 
+        metaClass.getChild = { Class clazz, def id ->
+            assert id != null : "ID cannot be null"
+            assert id instanceof String || id instanceof Long
+            Key key = new Key(delegate.getKey(), clazz, id)
+            Holder.current.execute {
+                delegate.get(key)
+            }
+        }
+
+        metaClass.loadChild = { Class clazz, def id ->
+            assert id != null : "ID cannot be null"
+            assert id instanceof String || id instanceof Long
+            Key key = new Key(delegate.getKey(), clazz, id)
+            Holder.current.execute {
+                delegate.find(key)
+            }
+        }
+
         metaClass.'static'.get = { def id ->
             assert id != null : "ID cannot be null"
             assert id instanceof Key || id instanceof String || id instanceof Long || id instanceof Iterable

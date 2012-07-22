@@ -226,4 +226,37 @@ class GroovifyBasicDslTest extends Specification {
             key1.parent == modelKey
             modelKey.parent == null
     }
+
+    def "Load children"() {
+        setup:
+            CarModel model = new CarModel(
+                    vendor: 'Vaz',
+                    model: '2101'
+            )
+            model.save()
+            Car car1 = new Car(
+                    model: model.key,
+                    price: 100
+            )
+            car1.save()
+            Car car2 = new Car(
+                    model: model.key,
+                    price: 120
+            )
+            car2.save()
+        when:
+            Car child = model.loadChild(Car, car1.id)
+        then:
+            child != null
+            child.id == car1.id
+        when:
+            child = model.loadChild(Car, car2.id)
+        then:
+            child != null
+            child.id == car2.id
+        when:
+            child = model.loadChild(Car, car1.id + car2.id)
+        then:
+            child == null
+    }
 }
