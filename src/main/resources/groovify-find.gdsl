@@ -1,0 +1,56 @@
+def domainCtx = context(
+        ctype: 'java.lang.Class'
+        //ctype: PsiJavaPatterns.psiClass().withName(PlatformPatterns.string().matches(/.*/))
+)
+
+def instanceCtx = context(
+        ctype: 'java.lang.Object'
+)
+
+private String extractParameter(def type) {
+  def parameters = type.parameters
+  if (!parameters || parameters.length != 1) return 'java.lang.Object'
+  return parameters[0].canonicalText
+}
+
+contributor([domainCtx]) {
+
+    method name: 'findWhere',
+           params: [
+                   query: 'java.util.Map',
+                   params: 'java.util.Map',
+                   closure: {}
+           ],
+           type: "java.util.List<${extractParameter(psiType)}>"
+    method name: 'findWhere',
+           params: [
+                   query: 'java.util.Map',
+                   params: 'java.util.Map',
+           ],
+           type: "java.util.List<${extractParameter(psiType)}>"
+    method name: 'findWhere',
+           params: [
+                   query: 'java.util.Map',
+           ],
+           type: "java.util.List<${extractParameter(psiType)}>"
+
+    method name: 'findFirstWhere',
+           params: [
+                   query: 'java.util.Map',
+                   params: 'java.util.Map',
+                   closure: {}
+           ],
+           type: extractParameter(psiType)
+    method name: 'findFirstWhere',
+           params: [
+                   query: 'java.util.Map',
+                   params: 'java.util.Map',
+           ],
+           type: extractParameter(psiType)
+    method name: 'findFirstWhere',
+           params: [
+                   query: 'java.util.Map',
+           ],
+           type: extractParameter(psiType)
+
+}
