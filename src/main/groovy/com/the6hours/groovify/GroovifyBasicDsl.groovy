@@ -110,6 +110,15 @@ class GroovifyBasicDsl {
             }
         }
 
+        metaClass.'static'.getAll = { def ids ->
+            assert ids != null : "ID list cannot be null"
+            assert ids instanceof Iterable
+            Map loaded = Holder.current.execute {
+                delegate.get(ids)
+            }
+            return ids.collect { loaded[it] }
+        }
+
         metaClass.'static'.get = { def id ->
             assert id != null : "ID cannot be null"
             assert id instanceof Key || id instanceof String || id instanceof Long || id instanceof Iterable
