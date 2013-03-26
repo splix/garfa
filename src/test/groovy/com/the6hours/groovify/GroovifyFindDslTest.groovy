@@ -1,6 +1,7 @@
 package com.the6hours.groovify
 
 import com.googlecode.objectify.ObjectifyFactory
+import com.the6hours.spockappengine.WithGae
 import spock.lang.Specification
 import com.the6hours.groovify.testmodels.CarModel
 
