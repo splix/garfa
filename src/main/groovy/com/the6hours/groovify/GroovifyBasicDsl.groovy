@@ -43,6 +43,7 @@ class GroovifyBasicDsl {
 
         metaClass.save = {->
             def obj = delegate
+            processBeforeXXX(obj)
             Holder.current.execute {
                 put(obj)
             }
@@ -74,6 +75,7 @@ class GroovifyBasicDsl {
                     block.delegate = stored
                     block.call(stored)
                     try {
+                        processBeforeXXX(stored)
                         delegate.put(stored)
                         updated = stored
                         return true
@@ -179,4 +181,21 @@ class GroovifyBasicDsl {
     }
 
 
+    void processBeforeXXX(def obj) {
+        if (obj == null) {
+            return
+        }
+        if (obj.respondsTo('beforeSave')) {
+            obj.beforeSave()
+        }
+        if (obj.id == null) {
+            if (obj.respondsTo('beforeInsert')) {
+                obj.beforeInsert()
+            }
+        } else {
+            if (obj.respondsTo('beforeUpdate')) {
+                obj.beforeUpdate()
+            }
+        }
+    }
 }

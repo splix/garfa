@@ -9,6 +9,12 @@ import javax.persistence.Id
  */
 class CarModel {
 
+    static Map __forTesting = [
+            beforeSave: 0,
+            beforeInsert: 0,
+            beforeUpdate: 0
+    ]
+
     @Id
     Long id
 
@@ -16,4 +22,15 @@ class CarModel {
     String model
     int year
 
+    void beforeSave() {
+        __forTesting.beforeSave++
+    }
+
+    void beforeInsert() {
+        __forTesting.beforeInsert++
+    }
+
+    void beforeUpdate() {
+        __forTesting.beforeUpdate++
+    }
 }

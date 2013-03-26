@@ -40,6 +40,22 @@ class GroovifyBasicDslTest extends Specification {
             car.id != null
     }
 
+    def "Call beforeXXX on save car"() {
+        setup:
+            CarModel.__forTesting.beforeSave = 0
+            CarModel.__forTesting.beforeInsert = 0
+            CarModel car = new CarModel(
+                    vendor: 'Vaz',
+                    model: '2101'
+            )
+        when:
+            car.save()
+        then:
+            car.id != null
+            CarModel.__forTesting.beforeSave == 1
+            CarModel.__forTesting.beforeInsert == 1
+    }
+
     def "Get car"() {
         setup:
             CarModel car = new CarModel(
@@ -145,6 +161,30 @@ class GroovifyBasicDslTest extends Specification {
         then:
             car3 != null
             car3.model == '2109'
+    }
+
+    def "Update car call beforeXXX"() {
+        setup:
+            CarModel.__forTesting.beforeSave = 0
+            CarModel.__forTesting.beforeInsert = 0
+            CarModel.__forTesting.beforeUpdate = 0
+            CarModel car = new CarModel(
+                    vendor: 'Vaz',
+                    model: '2101'
+            )
+            car.save()
+        when:
+            CarModel car2 = CarModel.get(car.id)
+            car2.update { CarModel curr ->
+                curr.model = '2109'
+            }
+            CarModel car3 = CarModel.get(car.id)
+        then:
+            car3 != null
+            car3.model == '2109'
+            CarModel.__forTesting.beforeSave == 2 //on save and on update
+            CarModel.__forTesting.beforeInsert == 1
+            CarModel.__forTesting.beforeUpdate == 1
     }
 
     def "Find first"() {
