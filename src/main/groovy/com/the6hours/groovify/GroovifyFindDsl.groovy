@@ -29,6 +29,17 @@ class GroovifyFindDsl {
                 if (params?.order) {
                     q.order(params.order)
                 }
+                if (params?.cursor) {
+                    Cursor cursor
+                    if (params.cursor instanceof String) {
+                        cursor = Cursor.fromWebSafeString(params.cursor)
+                    } else if (params.cursor instanceof Cursor) {
+                        cursor = params.cursor
+                    } else {
+                        cursor = Cursor.fromWebSafeString(params.cursor.toString())
+                    }
+                    q.startCursor(cursor)
+                }
                 query.entrySet().each { Map.Entry where ->
                     String field = where.key
                     if (field.indexOf(' ') < 0) {
