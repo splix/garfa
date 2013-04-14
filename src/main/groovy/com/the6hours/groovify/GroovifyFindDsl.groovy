@@ -1,5 +1,6 @@
 package com.the6hours.groovify
 
+import com.google.appengine.api.datastore.Cursor
 import com.googlecode.objectify.Objectify
 import com.googlecode.objectify.Query
 
@@ -12,6 +13,12 @@ class GroovifyFindDsl {
 
     void extend(Class dc) {
         def metaClass = dc.metaClass
+        metaClass.'static'.iterWhere = { Map query ->
+            return delegate.iterWhere(query, [:], null)
+        }
+        metaClass.'static'.iterWhere = { Map query, Map params ->
+            return delegate.iterWhere(query, params, null)
+        }
         metaClass.'static'.iterWhere = { Map query, Map params, Closure block ->
             Holder.current.execute {
                 Objectify ob = delegate
