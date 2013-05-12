@@ -1,9 +1,9 @@
-package com.the6hours.groovify
+package com.the6hours.garfa
 
 import com.googlecode.objectify.ObjectifyFactory
 import com.the6hours.spockappengine.WithGae
 import spock.lang.Specification
-import com.the6hours.groovify.testmodels.CarModel
+import com.the6hours.garfa.testmodels.CarModel
 
 /**
  * 
@@ -11,16 +11,16 @@ import com.the6hours.groovify.testmodels.CarModel
  * @since 18.10.11
  */
 @WithGae
-class GroovifyFindDslTest extends Specification {
+class GarfaFindDslTest extends Specification {
 
     def setup() {
         ObjectifyFactory ofy = new ObjectifyFactory()
-        Groovify groovify = new Groovify(
+        Garfa garfa = new Garfa(
                 objectifyFactory: ofy
         )
         [CarModel].each {
              ofy.register(it)
-             groovify.register(it)
+             garfa.register(it)
         }
 
         ['2101', '2106', '2108', '2109'].eachWithIndex { String it, int idx ->

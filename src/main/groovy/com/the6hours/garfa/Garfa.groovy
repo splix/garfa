@@ -1,4 +1,4 @@
-package com.the6hours.groovify
+package com.the6hours.garfa
 
 import com.googlecode.objectify.ObjectifyFactory
 
@@ -8,15 +8,15 @@ import com.googlecode.objectify.ObjectifyFactory
  * @since 28.08.11
  * @author Igor Artamonov (http://igorartamonov.com)
  */
-class Groovify {
+class Garfa {
 
-    GroovifyBasicDsl basicDsl = new GroovifyBasicDsl()
-    GroovifyFindDsl  findDsl = new GroovifyFindDsl()
+    GarfaBasicDsl basicDsl = new GarfaBasicDsl()
+    GarfaFindDsl  findDsl = new GarfaFindDsl()
 
-    Groovify() {
+    Garfa() {
     }
 
-    Groovify(ObjectifyFactory factory) {
+    Garfa(ObjectifyFactory factory) {
         this.setObjectifyFactory(factory)
     }
 

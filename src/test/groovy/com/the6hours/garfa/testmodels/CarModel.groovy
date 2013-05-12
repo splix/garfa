@@ -1,4 +1,4 @@
-package com.the6hours.groovify.testmodels
+package com.the6hours.garfa.testmodels
 
 import javax.persistence.Id
 

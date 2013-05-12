@@ -1,4 +1,4 @@
-package com.the6hours.groovify
+package com.the6hours.garfa
 
 import com.googlecode.objectify.Objectify
 import com.googlecode.objectify.Key
@@ -14,7 +14,7 @@ import com.googlecode.objectify.annotation.Parent
  * @since 17.08.11
  * @author Igor Artamonov (http://igorartamonov.com)
  */
-class GroovifyBasicDsl {
+class GarfaBasicDsl {
 
     private static final Logger log = LoggerFactory.getLogger(this)
 

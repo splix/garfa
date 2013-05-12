@@ -1,4 +1,4 @@
-package com.the6hours.groovify
+package com.the6hours.garfa
 
 import java.lang.reflect.Field
 import java.lang.reflect.Modifier

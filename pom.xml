@@ -2,14 +2,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.the6hours</groupId>
-    <artifactId>groovify-appengine</artifactId>
+    <artifactId>garfa</artifactId>
     <packaging>jar</packaging>
     <version>0.5-SNAPSHOT</version>
-    <name>Groovify Appengine</name>
-    <url>https://github.com/splix/groovify-appengine</url>
+    <name>Garfa</name>
+    <url>https://github.com/splix/garfa</url>
 
     <description>
-        ActiveRecord for your GAE data models, based on Objectify
+        Groovy ActiveRecord for Google Appengine. Based on Objectify
     </description>
     <licenses>
         <license>
@@ -20,8 +20,8 @@
     </licenses>
 
     <scm>
-        <url>git@github.com:splix/groovify-appengine.git</url>
-        <connection>scm:git:git@github.com:splix/groovify-appengine.git</connection>
+        <url>git@github.com:splix/garfa.git</url>
+        <connection>scm:git:git@github.com:splix/garfa.git</connection>
     </scm>
 
     <developers>
@@ -31,12 +31,6 @@
             <email>igor@artamonov.ru</email>
         </developer>
     </developers>
-
-    <parent>
-        <groupId>org.sonatype.oss</groupId>
-        <artifactId>oss-parent</artifactId>
-        <version>7</version>
-    </parent>
 
     <properties>
         <gae.version>1.7.5</gae.version>

@@ -1,4 +1,4 @@
-package com.the6hours.groovify
+package com.the6hours.garfa
 
 import com.googlecode.objectify.ObjectifyFactory
 import com.googlecode.objectify.Objectify

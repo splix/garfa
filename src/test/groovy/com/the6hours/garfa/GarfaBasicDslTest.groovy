@@ -1,11 +1,11 @@
-package com.the6hours.groovify
+package com.the6hours.garfa
 
 import com.the6hours.spockappengine.WithGae
 import spock.lang.Specification
 import com.googlecode.objectify.ObjectifyFactory
-import com.the6hours.groovify.testmodels.CarModel
+import com.the6hours.garfa.testmodels.CarModel
 import com.googlecode.objectify.NotFoundException
-import com.the6hours.groovify.testmodels.Car
+import com.the6hours.garfa.testmodels.Car
 import com.googlecode.objectify.Key
 
 /**
@@ -14,16 +14,16 @@ import com.googlecode.objectify.Key
  * @since 10.10.11
  */
 @WithGae
-class GroovifyBasicDslTest extends Specification {
+class GarfaBasicDslTest extends Specification {
 
     def setup() {
         ObjectifyFactory ofy = new ObjectifyFactory()
-        Groovify groovify = new Groovify(
+        Garfa garfa = new Garfa(
                 objectifyFactory: ofy
         )
         [CarModel, Car].each {
              ofy.register(it)
-             groovify.register(it)
+             garfa.register(it)
         }
     }
 

@@ -1,4 +1,4 @@
-package com.the6hours.groovify
+package com.the6hours.garfa
 
 import com.google.appengine.api.datastore.Cursor
 import com.googlecode.objectify.Objectify
@@ -9,7 +9,7 @@ import com.googlecode.objectify.Query
  * @since 10.10.11
  * @author Igor Artamonov (http://igorartamonov.com)
  */
-class GroovifyFindDsl {
+class GarfaFindDsl {
 
     void extend(Class dc) {
         def metaClass = dc.metaClass
