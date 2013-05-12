@@ -1,12 +1,9 @@
-Updating data
-=============
-
 Create new data object
 ----------------------
 
-Groovify will automaticalyy add .save() method to your domain classes
+Garfa will automaticalyy add .save() method to your domain classes
 
-```Grooovy
+```groovy
 car = new Car(
     brand: 'Ford',
     model: 'Mustang',
@@ -20,11 +17,11 @@ Update item in transaction
 --------------------------
 
 GAE uses optimistic-locking transactions, so, to update an item, we trying to load it
-from DB, and execute your code agains this instance. If save is failed, we retry 
+from DB, and execute your code agains this instance. If save is failed, we retry
 load-update-save at least 3 times.
 
-```Groovy
-car.update { Car loaded -> 
+```groovy
+car.update { Car loaded ->
   loaded.count++
 }
 ```
@@ -32,6 +29,6 @@ car.update { Car loaded ->
 where:
   * car - current instance
   * loaded - instance loaded for update (can be different from current)
-  
-If saving has been failed - it reloads Car from database, and execute your `.count++` 
-once again 
+
+If saving has been failed - it reloads Car from database, and execute your `.count++`
+once again

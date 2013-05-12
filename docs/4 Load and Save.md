@@ -1,6 +1,3 @@
-Querying
-========
-
 Get item by ID
 --------------
 
@@ -8,11 +5,12 @@ There is two method for loading data from database:
 
  * .get(id or key)
  * .load(id or key)
+ * .getAll(list of ids or keys)
 
 First will throw error if there is no object with specified ID, second just
 returns `null` at this case.
 
-```Groovy
+```groovy
 Long id = 1
 Car car = Car.get(id)
 
@@ -35,7 +33,7 @@ it's no a passed parameter, your code will operates directly against query insta
 
 For example:
 
-```Groovy
+```groovy
 Car.findAll {
   filter('vendor =', 'Ford')
   limit(10)
@@ -47,7 +45,7 @@ Find Where
 
 There is an another method for querying:
 
-```Groovy
+```groovy
 Clazz.findWhere([<fields>], [<params>]) {
   // code executed against Query
 }
@@ -64,7 +62,7 @@ where:
 
 For example:
 
-```Groovy
+```groovy
 //get maximum 20 cars where count > 10, ordered by count field, descending
 List cars = Car.findWhere(['count >': 10], [order: '-count', limit: 20])
 ```
