@@ -13,6 +13,7 @@ Garfa extends you Groovy class with methods for querying, storing, updating you 
 
 Latest stable version: 0.4
 Latest development version: 0.5-SNAPSHOT
+Docs: http://splix.github.io/garfa/
 
 Examples
 --------
@@ -82,7 +83,7 @@ If you're using Spring Framework it could be called on beans initialization (a `
 Documentation
 -------------
 
- * https://splix.github.io/garfa/
+ * http://splix.github.io/garfa/
 
 License
 -------
