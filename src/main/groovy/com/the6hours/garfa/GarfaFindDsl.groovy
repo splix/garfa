@@ -13,13 +13,26 @@ class GarfaFindDsl {
 
     void extend(Class dc) {
         def metaClass = dc.metaClass
+
+        // DEPRECATED
         metaClass.'static'.iterWhere = { Map query ->
-            return delegate.iterWhere(query, [:], null)
+            return delegate.iterateWhere(query, [:], null)
         }
         metaClass.'static'.iterWhere = { Map query, Map params ->
-            return delegate.iterWhere(query, params, null)
+            return delegate.iterateWhere(query, params, null)
         }
         metaClass.'static'.iterWhere = { Map query, Map params, Closure block ->
+            return delegate.iterateWhere(query, params, block)
+        }
+        //DEPRECATED
+
+        metaClass.'static'.iterateWhere = { Map query ->
+            return delegate.iterateWhere(query, [:], null)
+        }
+        metaClass.'static'.iterateWhere = { Map query, Map params ->
+            return delegate.iterateWhere(query, params, null)
+        }
+        metaClass.'static'.iterateWhere = { Map query, Map params, Closure block ->
             Holder.current.execute {
                 Objectify ob = delegate
                 Query q = ob.query(dc)

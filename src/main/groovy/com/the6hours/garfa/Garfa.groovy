@@ -12,6 +12,7 @@ class Garfa {
 
     GarfaBasicDsl basicDsl = new GarfaBasicDsl()
     GarfaFindDsl  findDsl = new GarfaFindDsl()
+    GarfaDynamicFindDsl dynamicFindDsl = new GarfaDynamicFindDsl()
 
     Garfa() {
     }
@@ -29,6 +30,13 @@ class Garfa {
     void register(Class model) {
         basicDsl.extend(model)
         findDsl.extend(model)
+        model.metaClass.'static'.methodMissing = { String name, args ->
+            if (dynamicFindDsl.supports(name)) {
+                return dynamicFindDsl.tryExecute(model, name, (List) args)
+            } else {
+                new MissingMethodException(name, delegate, args)
+            }
+        }
     }
 
     void setObjectifyFactory(ObjectifyFactory ofy) {
