@@ -3,41 +3,50 @@ Get item by ID
 
 There is two method for loading data from database:
 
- * .get(id or key)
- * .load(id or key)
- * .getAll(list of ids or keys)
+### Model.get(id or key)
 
-First will throw error if there is no object with specified ID, second just
-returns `null` at this case.
+Will throw error if there is no entity with specified ID
 
 ```groovy
 Long id = 1
-Car car = Car.get(id)
+try {
+  Car car = Car.get(id)
+} catch (NotFoundException e) {
+  ...
+}
 
-Key<Car> carKey = car.key
-Car car2 = Car.get(carKey)
-
-car = Car.load(id) //car can be null if there is no entity with id = 1
+Key<Car> carKey = new Key<Car>(Car, 1)
+try {
+  Car car2 = Car.get(carKey)
+} catch (NotFoundException e) {
+  ...
+}
 ```
 
-Query
------
+### Model.load(id or key)
 
-You have direct access to Objectify's Query, by using two following methods:
-
- * .findFirst {}
- * .findAll {}
-
-where you can pass the code that can modify any options of passed Query object. Please notice, that query instance,
-it's no a passed parameter, your code will operates directly against query instance, as an DSL.
-
-For example:
+Will returns `null` if there are no entity with specified ID.
 
 ```groovy
-Car.findAll {
-  filter('vendor =', 'Ford')
-  limit(10)
+Long id = 1
+Car car = Car.load(id)
+if (car == null) {
+   ... not found
 }
+
+Key<Car> carKey = new Key<Car>(Car, 1)
+Car car2 = Car.load(carKey)
+if (car2 == null) {
+   ... not found
+}
+```
+
+### Model.getAll(list of ids or keys)
+
+Loads list of entities for specified ids:
+
+```groovy
+List<Car> cars = Car.getAll([1, 2, 3])
 ```
 
 Find Where
@@ -65,4 +74,18 @@ For example:
 ```groovy
 //get maximum 20 cars where count > 10, ordered by count field, descending
 List cars = Car.findWhere(['count >': 10], [order: '-count', limit: 20])
+```
+
+Find by Ancestor
+----------------
+
+```groovy
+//a parent instance
+CarModel fordFocus
+
+//find by parent:
+List<Car> cars = Car.findByAncestor(fordFocus)
+
+//or by a parent key:
+List<Car> cars = Car.findByAncestor(fordFocus.key)
 ```
