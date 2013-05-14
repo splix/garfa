@@ -18,7 +18,7 @@ Download
 <dependency>
     <groupId>com.the6hours</groupId>
     <artifactId>garfa</artifactId>
-    <version>0.5-SNAPSHOT</version>
+    <version>0.5</version>
 </dependency>
 ```
 

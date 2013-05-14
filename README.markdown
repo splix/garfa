@@ -11,9 +11,7 @@ It's:
 
 Garfa extends you Groovy class with methods for querying, storing, updating you database.
 
-Latest stable version: 0.4
-
-Latest development version: 0.5-SNAPSHOT
+Latest stable version: 0.5
 
 Docs: http://splix.github.io/garfa/
 
@@ -51,7 +49,7 @@ Maven dependency
 <dependency>
     <groupId>com.the6hours</groupId>
     <artifactId>garfa</artifactId>
-    <version>0.5-SNAPSHOT</version>
+    <version>0.5</version>
 </dependency>
 ```
 
