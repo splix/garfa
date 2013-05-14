@@ -41,6 +41,10 @@ class GarfaBasicDsl {
             }
         }
 
+        metaClass.'static'.withObjectify = { Closure block ->
+            Holder.current.execute(block)
+        }
+
         metaClass.save = {->
             def obj = delegate
             processBeforeXXX(obj)
