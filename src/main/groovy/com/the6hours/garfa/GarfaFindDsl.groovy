@@ -39,6 +39,9 @@ class GarfaFindDsl {
                 if (params?.limit) {
                     q.limit(params.limit)
                 }
+                if (params?.offset) {
+                    q.offset(params.offset)
+                }
                 if (params?.order) {
                     q.order(params.order)
                 }
