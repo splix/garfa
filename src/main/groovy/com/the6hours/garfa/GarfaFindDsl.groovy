@@ -44,6 +44,8 @@ class GarfaFindDsl {
                 }
                 if (params?.order) {
                     q.order(params.order)
+                } else  if (params?.sort) {
+                    q.order(params.sort)
                 }
                 if (params?.cursor) {
                     Cursor cursor
