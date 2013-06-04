@@ -4,7 +4,7 @@
     <groupId>com.the6hours</groupId>
     <artifactId>garfa</artifactId>
     <packaging>jar</packaging>
-    <version>0.5</version>
+    <version>0.6-SNAPSHOT</version>
     <name>Garfa</name>
     <url>https://github.com/splix/garfa</url>
 
