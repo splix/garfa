@@ -26,13 +26,7 @@ class GarfaFindDsl {
         }
         //DEPRECATED
 
-        metaClass.'static'.iterateWhere = { Map query ->
-            return delegate.iterateWhere(query, [:], null)
-        }
-        metaClass.'static'.iterateWhere = { Map query, Map params ->
-            return delegate.iterateWhere(query, params, null)
-        }
-        metaClass.'static'.iterateWhere = { Map query, Map params, Closure block ->
+        metaClass.'static'.queryWhere = { Map query, Map params ->
             Holder.current.execute {
                 Objectify ob = delegate
                 Query q = ob.query(dc)
@@ -65,13 +59,25 @@ class GarfaFindDsl {
                     }
                     q.filter(field, where.value)
                 }
-                if (block) {
-                    block.delegate = q
-                    block.call()
-                }
-                return q.fetch().iterator()
+                return q
             }
         }
+
+        metaClass.'static'.iterateWhere = { Map query ->
+            return delegate.iterateWhere(query, [:], null)
+        }
+        metaClass.'static'.iterateWhere = { Map query, Map params ->
+            return delegate.iterateWhere(query, params, null)
+        }
+        metaClass.'static'.iterateWhere = { Map query, Map params, Closure block ->
+            Query q = delegate.queryWhere(query, params)
+            if (block) {
+                block.delegate = q
+                block.call()
+            }
+            return q.fetch().iterator()
+        }
+
         metaClass.'static'.findWhere = { Map query, Map params, Closure block ->
             return delegate.iterWhere(query, params, block).toList()
         }
