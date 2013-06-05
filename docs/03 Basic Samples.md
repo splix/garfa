@@ -35,7 +35,7 @@ Create entities
 ---------------
 
 ```groovy
-CarModel mustang = new CarModel(vendor: 'Ford', model: 'Focus', year: 2012)
+CarModel mustang = new CarModel(vendor: 'Ford', model: 'Mustang', year: 2012)
 mustang.save()
 Car redMustang = new Car(model: mustang.key, price: 22000, color: 'red')
 redMustang.save()

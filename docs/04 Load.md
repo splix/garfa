@@ -49,6 +49,22 @@ Loads list of entities for specified ids:
 List<Car> cars = Car.getAll([1, 2, 3])
 ```
 
+Get a Query for a Model
+-----------------------
+
+You could get a Objectify Query for a model:
+
+```groovy
+Query<Model> query = Model.queryWhere([<fields>], [<params>])
+```
+
+where:
+
+ * fields - list of field filters, where keys is or simple field names (that mean equality filter), or string
+    as fieldname + operator. Like: `[model: 'Ford']` or `['model =': 'Ford']` or `['count >': 5]`.
+ * optional query parameters - like `[limit: 4]` or `[order: '-count']`
+
+
 Find Where
 ----------
 
