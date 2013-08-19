@@ -85,6 +85,13 @@ where:
  * closure - more flexibility when you need something specific. It's your code block that will be executed against
     prepared Query. Like `Car.findWhere([], []) { limit(5) }` (btw, it's the same as `.findWhere([], [limit: 5])`)
 
+Possible query parameters:
+ * limit
+ * offset
+ * ancestor - key or parent entity
+ * order - in format `[order: 'model']` standard ascending order, or `[order: '-year']` for descending order
+ * cursor - web-safe string for cursor, or `com.google.appengine.api.datastore.Cursor` instance
+
 For example:
 
 ```groovy

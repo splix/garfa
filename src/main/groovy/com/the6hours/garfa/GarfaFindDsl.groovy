@@ -45,6 +45,9 @@ class GarfaFindDsl {
                 } else  if (params?.sort) {
                     q.order(params.sort)
                 }
+                if (params?.ancestor) {
+                    q.ancestor(params.ancestor)
+                }
                 if (params?.cursor) {
                     Cursor cursor
                     if (params.cursor instanceof String) {
@@ -58,10 +61,14 @@ class GarfaFindDsl {
                 }
                 query.entrySet().each { Map.Entry where ->
                     String field = where.key
-                    if (field.indexOf(' ') < 0) {
-                        field += ' ='
+                    if (field == 'ancestor') {
+                        q.ancestor(where.value)
+                    } else {
+                        if (field.indexOf(' ') < 0) {
+                            field += ' ='
+                        }
+                        q.filter(field, where.value)
                     }
-                    q.filter(field, where.value)
                 }
                 return q
             }
