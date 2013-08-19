@@ -26,6 +26,10 @@ class GarfaFindDsl {
         }
         //DEPRECATED
 
+        metaClass.'static'.all = {
+            return delegate.findWhere([:], [:], null)
+        }
+
         metaClass.'static'.queryWhere = { Map query, Map params ->
             Holder.current.execute {
                 Objectify ob = delegate

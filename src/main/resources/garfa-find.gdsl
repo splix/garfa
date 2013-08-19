@@ -15,6 +15,10 @@ private String extractParameter(def type) {
 
 contributor([domainCtx]) {
 
+    method name: 'all',
+           params: [],
+           type: "java.util.List<${extractParameter(psiType)}>"
+
     method name: 'findWhere',
            params: [
                    query: 'java.util.Map',
