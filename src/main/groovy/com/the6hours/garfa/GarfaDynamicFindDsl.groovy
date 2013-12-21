@@ -45,7 +45,9 @@ class GarfaDynamicFindDsl {
     }
 
     boolean supports(String method) {
-        return method.startsWith('findBy') || method.startsWith('findFirstBy') ||
+        return method.startsWith('findBy') ||
+                method.startsWith('findFirstBy') ||
+                method.startsWith('findAllBy') ||
                 method.startsWith('iterateBy')
     }
 
@@ -58,6 +60,9 @@ class GarfaDynamicFindDsl {
         } else if (finder.startsWith('findFirstBy')) {
             method = 'findFirstWhere'
             prefix = 'findFirstBy'
+        } else if (finder.startsWith('findAllBy')) {
+            method = 'findWhere'
+            prefix = 'findAllBy'
         } else if (finder.startsWith('iterateBy')) {
             method = 'iterateWhere'
             prefix = 'iterateBy'
