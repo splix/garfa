@@ -127,7 +127,10 @@ class GarfaBasicDsl {
 
         metaClass.'static'.get = { def id ->
             assert id != null : "ID cannot be null"
-            assert id instanceof Key || id instanceof String || id instanceof Long || id instanceof Iterable
+            assert id instanceof Key || id instanceof String || id instanceof Long || id instanceof Integer || id instanceof Iterable
+            if (id instanceof Integer) {
+                id = id.longValue()
+            }
             if (id instanceof Key) {
                 Holder.current.execute {
                     delegate.get(id)
@@ -148,7 +151,10 @@ class GarfaBasicDsl {
             if (id == null) {
                 return null
             }
-            assert id instanceof Key || id instanceof String || id instanceof Long || id instanceof Iterable
+            assert id instanceof Key || id instanceof String || id instanceof Long || id instanceof Integer || id instanceof Iterable
+            if (id instanceof Integer) {
+                id = id.longValue()
+            }
             if (id instanceof Key) {
                 Holder.current.execute {
                     delegate.find(id)
