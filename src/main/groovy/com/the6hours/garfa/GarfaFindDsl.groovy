@@ -117,6 +117,13 @@ class GarfaFindDsl {
             return delegate.findByAncestor(key, null)
         }
         metaClass.'static'.findByAncestor = { Object key, Map params ->
+            return delegate.iterateByAncestor(key, params).toList()
+        }
+
+        metaClass.'static'.iterateByAncestor = { Object key ->
+            return delegate.findByAncestor(key, null)
+        }
+        metaClass.'static'.iterateByAncestor = { Object key, Map params ->
             Holder.current.execute {
                 Objectify ob = delegate
                 Query q = ob.query(dc)
@@ -127,7 +134,7 @@ class GarfaFindDsl {
                     q.order(params.order)
                 }
                 q.ancestor(key)
-                return q.fetch().iterator().toList()
+                return q.fetch().iterator()
             }
         }
     }
