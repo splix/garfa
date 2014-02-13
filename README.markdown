@@ -13,7 +13,7 @@ It's:
 
 Garfa extends you Groovy class with methods for querying, storing, updating you database.
 
-Latest stable version: 0.5
+Latest stable version: 0.6
 
 Docs: http://splix.github.io/garfa/
 

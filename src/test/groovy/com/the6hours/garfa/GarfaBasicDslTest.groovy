@@ -69,7 +69,7 @@ class GarfaBasicDslTest extends Specification {
             car2.vendor == 'Vaz'
             car2.model == '2101'
         when:
-            CarModel car3 = CarModel.get(car.id + 1)
+            CarModel car3 = CarModel.get(car.id + 15123, [safe: true])
         then:
             thrown(NotFoundException)
     }
