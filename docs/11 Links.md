@@ -7,7 +7,7 @@ Project Links
 Used technologies
 -----------------
 
-  * Objectify 3 - http://code.google.com/p/objectify-appengine/
+  * Objectify - http://code.google.com/p/objectify-appengine/
   * Google Appengine - https://developers.google.com/appengine/
   * Groovy - http://groovy.codehaus.org/
 

@@ -3,6 +3,8 @@ package com.the6hours.garfa
 import com.google.appengine.api.datastore.Cursor
 import com.googlecode.objectify.Objectify
 import com.googlecode.objectify.Query
+import com.googlecode.objectify.cmd.LoadType
+import com.googlecode.objectify.cmd.Query
 
 /**
  *
@@ -33,20 +35,20 @@ class GarfaFindDsl {
         metaClass.'static'.queryWhere = { Map query, Map params ->
             Holder.current.execute {
                 Objectify ob = delegate
-                Query q = ob.query(dc)
+                Query q = ob.load().type(dc)
                 if (params?.limit) {
-                    q.limit(params.limit)
+                    q = q.limit(params.limit as Integer)
                 }
                 if (params?.offset) {
-                    q.offset(params.offset)
+                    q = q.offset(params.offset as Integer)
                 }
                 if (params?.order) {
-                    q.order(params.order)
+                    q = q.order(params.order)
                 } else  if (params?.sort) {
-                    q.order(params.sort)
+                    q = q.order(params.sort)
                 }
                 if (params?.ancestor) {
-                    q.ancestor(params.ancestor)
+                    q = q.ancestor(params.ancestor)
                 }
                 if (params?.cursor) {
                     Cursor cursor
@@ -57,17 +59,19 @@ class GarfaFindDsl {
                     } else {
                         cursor = Cursor.fromWebSafeString(params.cursor.toString())
                     }
-                    q.startCursor(cursor)
+                    q = q.startAt(cursor)
                 }
                 query.entrySet().each { Map.Entry where ->
                     String field = where.key
                     if (field == 'ancestor') {
-                        q.ancestor(where.value)
+                        q = q.ancestor(where.value)
                     } else {
                         if (field.indexOf(' ') < 0) {
+                            //just a fields name, means 'equal to'
+                            //'field' -> 'field ='
                             field += ' ='
                         }
-                        q.filter(field, where.value)
+                        q = q.filter(field, where.value)
                     }
                 }
                 return q
@@ -86,7 +90,7 @@ class GarfaFindDsl {
                 block.delegate = q
                 block.call()
             }
-            return q.fetch().iterator()
+            return q.iterator()
         }
 
         metaClass.'static'.findWhere = { Map query, Map params, Closure block ->
@@ -126,15 +130,15 @@ class GarfaFindDsl {
         metaClass.'static'.iterateByAncestor = { Object key, Map params ->
             Holder.current.execute {
                 Objectify ob = delegate
-                Query q = ob.query(dc)
+                LoadType q = ob.load().type(dc)
                 if (params?.limit) {
-                    q.limit(params.limit)
+                    q = q.limit(params.limit)
                 }
                 if (params?.order) {
-                    q.order(params.order)
+                    q = q.order(params.order)
                 }
-                q.ancestor(key)
-                return q.fetch().iterator()
+                q = q.ancestor(key)
+                return q.iterator()
             }
         }
     }

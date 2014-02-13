@@ -2,7 +2,9 @@ package com.the6hours.garfa
 
 import com.googlecode.objectify.Objectify
 import com.googlecode.objectify.Key
-import com.googlecode.objectify.Query
+import com.googlecode.objectify.cmd.LoadType
+import com.googlecode.objectify.cmd.Query
+import com.googlecode.objectify.cmd.QueryExecute
 import org.slf4j.LoggerFactory
 import org.slf4j.Logger
 import java.lang.reflect.Field
@@ -32,11 +34,12 @@ class GarfaBasicDsl {
             if (parent) {
                 String parentField = parent.name
                 metaClass.getKey = {->
-                    return new Key(delegate.getAt(parentField), dc, delegate.id)
+                    Key parentKey = delegate.getAt(parentField)
+                    return Key.create(parentKey, dc, delegate.id)
                 }
             } else {
                 metaClass.getKey = {->
-                    return new Key(dc, delegate.id)
+                    return Key.create(dc, delegate.id)
                 }
             }
         }
@@ -45,18 +48,36 @@ class GarfaBasicDsl {
             Holder.current.execute(block)
         }
 
-        metaClass.save = {->
+        metaClass.save = { Map opts = [:] ->
             def obj = delegate
             processBeforeXXX(obj)
+            opts = opts ?: [:]
+            if (opts.flush == null) {
+                opts.flush = Garfa.defaultOption('save', 'flush')
+            }
             Holder.current.execute {
-                put(obj)
+                Objectify ob = delegate
+                if (opts?.flush) {
+                    ob.save().entity(obj).now()
+                } else {
+                    ob.save().entity(obj)
+                }
             }
         }
 
-        metaClass.delete = {->
+        metaClass.delete = { Map opts = [:] ->
             def obj = delegate
+            opts = opts ?: [:]
+            if (opts.flush == null) {
+                opts.flush = Garfa.defaultOption('delete', 'flush')
+            }
             Holder.current.execute {
-                delete(obj)
+                Objectify ob = delegate
+                if (opts?.flush) {
+                    ob.delete().entity(obj).now()
+                } else {
+                    ob.delete().entity(obj)
+                }
             }
         }
 
@@ -74,13 +95,14 @@ class GarfaBasicDsl {
             def updated = null
             while (!saved && tries > 0) {
                 tries--
-                saved = (Boolean)Holder.current.inTransaction {
-                    Object stored = delegate.get(key)
+                saved = (Boolean)Holder.current.withTransaction {
+                    Objectify ob = delegate
+                    Object stored = ob.load().key(key).now()
                     block.delegate = stored
                     block.call(stored)
                     try {
                         processBeforeXXX(stored)
-                        delegate.put(stored)
+                        ob.save().entity(stored)
                         updated = stored
                         return true
                     } catch (Exception e) {
@@ -101,91 +123,87 @@ class GarfaBasicDsl {
         metaClass.getChild = { Class clazz, def id ->
             assert id != null : "ID cannot be null"
             assert id instanceof String || id instanceof Long
-            Key key = new Key(delegate.getKey(), clazz, id)
-            Holder.current.execute {
-                delegate.get(key)
-            }
+            Key key = Key.create(delegate.getKey(), clazz, id)
+            delegate.get(key)
         }
 
         metaClass.loadChild = { Class clazz, def id ->
             assert id != null : "ID cannot be null"
             assert id instanceof String || id instanceof Long
-            Key key = new Key(delegate.getKey(), clazz, id)
-            Holder.current.execute {
-                delegate.find(key)
-            }
+            Key key = Key.create(delegate.getKey(), clazz, id)
+            delegate.get(key, [safe: false])
         }
 
         metaClass.'static'.getAll = { def ids ->
             assert ids != null : "ID list cannot be null"
             assert ids instanceof Iterable
-            Map loaded = Holder.current.execute {
-                delegate.get(ids)
-            }
-            return ids.collect { loaded[it] }
+            return delegate.get(ids)
         }
 
-        metaClass.'static'.get = { def id ->
+        metaClass.'static'.get = { def id, Map opts = [:] ->
             assert id != null : "ID cannot be null"
             assert id instanceof Key || id instanceof String || id instanceof Long || id instanceof Integer || id instanceof Iterable
             if (id instanceof Integer) {
                 id = id.longValue()
             }
+            opts = opts ?: [:]
+            if (opts.safe == null) {
+                opts.safe = Garfa.defaultOption('get', 'safe')
+            }
             if (id instanceof Key) {
                 Holder.current.execute {
-                    delegate.get(id)
+                    def loader = delegate.load().key(id)
+                    if (opts.safe) {
+                        return loader.safe()
+                    } else {
+                        return loader.now()
+                    }
                 }
             } else if (id instanceof Iterable) {
                 Map loaded = Holder.current.execute {
-                    delegate.get(id)
+                    delegate.load().keys(id)
                 }
                 return id.collect { loaded[it] }
             } else {
                 Holder.current.execute {
-                    delegate.get(dc, id)
+                    def loader = delegate.load().type(dc).id(id)
+                    if (opts?.safe) {
+                        return loader.safe()
+                    } else {
+                        return loader.now()
+                    }
                 }
             }
         }
 
         metaClass.'static'.load = { def id ->
-            if (id == null) {
-                return null
-            }
-            assert id instanceof Key || id instanceof String || id instanceof Long || id instanceof Integer || id instanceof Iterable
-            if (id instanceof Integer) {
-                id = id.longValue()
-            }
-            if (id instanceof Key) {
-                Holder.current.execute {
-                    delegate.find(id)
-                }
-            } else if (id instanceof Iterable) {
-                return delegate.get(id)
-            } else {
-                Holder.current.execute {
-                    delegate.find(dc, id)
-                }
-            }
+            delegate.get(id, [safe: false])
         }
 
         metaClass.'static'.findAll = { Closure block ->
             Holder.current.execute {
                 Objectify ob = delegate
-                Query q = ob.query(dc)
-                q.limit(1000)
+                Query q = ob.load().type(dc)
+                q = q.limit(1000)
                 block.delegate = q
-                block.call()
-                return q.fetch().iterator().toList()
+                def q2 = block.call()
+                if (q2 != null && q2 instanceof QueryExecute) {
+                    return q2.list()
+                }
+                return q.list()
             }
         }
 
         metaClass.'static'.findFirst = { Closure block ->
             Holder.current.execute {
                 Objectify ob = delegate
-                Query q = ob.query(dc)
+                Query q = ob.load().type(dc)
                 block.delegate = q
-                block.call()
-                return q.get()
+                def q2 = block.call()
+                if (q2 != null && q2 instanceof QueryExecute) {
+                    return q2.first().now()
+                }
+                return q.first().now()
             }
         }
     }

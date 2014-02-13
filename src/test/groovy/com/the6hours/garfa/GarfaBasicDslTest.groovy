@@ -35,7 +35,7 @@ class GarfaBasicDslTest extends Specification {
                     model: '2101'
             )
         when:
-            car.save()
+            car.save(flush: true)
         then:
             car.id != null
     }
@@ -49,7 +49,7 @@ class GarfaBasicDslTest extends Specification {
                     model: '2101'
             )
         when:
-            car.save()
+            car.save(flush: true)
         then:
             car.id != null
             CarModel.__forTesting.beforeSave == 1
@@ -62,11 +62,12 @@ class GarfaBasicDslTest extends Specification {
                     vendor: 'Vaz',
                     model: '2101'
             )
-            car.save()
+            car.save(flush: true)
         when:
             CarModel car2 = CarModel.get(car.id)
         then:
             car2 != null
+            car2.id != null
             car2.vendor == 'Vaz'
             car2.model == '2101'
         when:
@@ -81,17 +82,17 @@ class GarfaBasicDslTest extends Specification {
                     vendor: 'Vaz',
                     model: '2101'
             )
-            car.save()
+            car.save(flush: true)
             CarModel car2 = new CarModel(
                     vendor: 'Vaz',
                     model: '2102'
             )
-            car2.save()
+            car2.save(flush: true)
             CarModel car3 = new CarModel(
                     vendor: 'Vaz',
                     model: '2105'
             )
-            car3.save()
+            car3.save(flush: true)
         when:
             List<CarModel> cars = CarModel.get([car.key, car2.key, car3.key])
         then:
@@ -106,7 +107,7 @@ class GarfaBasicDslTest extends Specification {
                     vendor: 'Vaz',
                     model: '2101'
             )
-            car.save()
+            car.save(flush: true)
         when:
             CarModel car2 = CarModel.load(car.id)
         then:
@@ -114,7 +115,7 @@ class GarfaBasicDslTest extends Specification {
             car2.vendor == 'Vaz'
             car2.model == '2101'
         when:
-            CarModel car3 = CarModel.load(car.id + 1)
+            CarModel car3 = CarModel.load(car.id + 101234)
         then:
             car3 == null
     }
@@ -125,18 +126,18 @@ class GarfaBasicDslTest extends Specification {
                     vendor: 'Vaz',
                     model: '2101'
             )
-            car.save()
+            car.save(flush: true)
             CarModel car2 = new CarModel(
                     vendor: 'Vaz',
                     model: '2102'
             )
-            car2.save()
+            car2.save(flush: true)
             CarModel car3 = new CarModel(
                     vendor: 'Vaz',
                     model: '2105'
             )
-            car3.save()
-            car2.delete()
+            car3.save(flush: true)
+            car2.delete(flush: true)
         when:
             List<CarModel> cars = CarModel.load([car.key, car2.key, car3.key])
         then:
@@ -151,7 +152,7 @@ class GarfaBasicDslTest extends Specification {
                     vendor: 'Vaz',
                     model: '2101'
             )
-            car.save()
+            car.save(flush: true)
         when:
             CarModel car2 = CarModel.get(car.id)
             car2.update { CarModel curr ->
@@ -172,7 +173,7 @@ class GarfaBasicDslTest extends Specification {
                     vendor: 'Vaz',
                     model: '2101'
             )
-            car.save()
+            car.save(flush: true)
         when:
             CarModel car2 = CarModel.get(car.id)
             car2.update { CarModel curr ->
@@ -193,17 +194,17 @@ class GarfaBasicDslTest extends Specification {
                     vendor: 'Vaz',
                     model: '2101'
             )
-            car.save()
+            car.save(flush: true)
             CarModel car2 = new CarModel(
                     vendor: 'Vaz',
                     model: '2109'
             )
-            car2.save()
+            car2.save(flush: true)
             CarModel car3 = new CarModel(
                     vendor: 'Ford',
                     model: 'Mustang'
             )
-            car3.save()
+            car3.save(flush: true)
         when:
             CarModel found = CarModel.findFirst { filter('vendor =', 'Vaz') }
         then:
@@ -217,17 +218,17 @@ class GarfaBasicDslTest extends Specification {
                     vendor: 'Vaz',
                     model: '2101'
             )
-            car.save()
+            car.save(flush: true)
             CarModel car2 = new CarModel(
                     vendor: 'Vaz',
                     model: '2109'
             )
-            car2.save()
+            car2.save(flush: true)
             CarModel car3 = new CarModel(
                     vendor: 'Ford',
                     model: 'Mustang'
             )
-            car3.save()
+            car3.save(flush: true)
         when:
             List found = CarModel.findAll { filter('vendor =', 'Vaz') }
         then:
@@ -248,17 +249,17 @@ class GarfaBasicDslTest extends Specification {
                     vendor: 'Vaz',
                     model: '2101'
             )
-            model.save()
+            model.save(flush: true)
             Car car1 = new Car(
                     model: model.key,
                     price: 100
             )
-            car1.save()
+            car1.save(flush: true)
             Car car2 = new Car(
                     model: model.key,
                     price: 120
             )
-            car2.save()
+            car2.save(flush: true)
         when:
             Key key1 = car1.key
             Key modelKey = model.key
@@ -274,17 +275,17 @@ class GarfaBasicDslTest extends Specification {
                     vendor: 'Vaz',
                     model: '2101'
             )
-            model.save()
+            model.save(flush: true)
             Car car1 = new Car(
                     model: model.key,
                     price: 100
             )
-            car1.save()
+            car1.save(flush: true)
             Car car2 = new Car(
                     model: model.key,
                     price: 120
             )
-            car2.save()
+            car2.save(flush: true)
         when:
             Car child = model.loadChild(Car, car1.id)
         then:

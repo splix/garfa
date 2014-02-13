@@ -2,7 +2,8 @@ package com.the6hours.garfa
 
 import com.googlecode.objectify.Objectify
 import com.googlecode.objectify.ObjectifyFactory
-import com.googlecode.objectify.ObjectifyOpts
+import com.googlecode.objectify.ObjectifyService
+import com.googlecode.objectify.Work
 
 /**
  * TODO
@@ -25,6 +26,7 @@ class Holder {
                     objectifyFactory: _objectifyFactory
             )
             holder.set(h)
+            ObjectifyService.factory = _objectifyFactory
         }
         return h
     }
@@ -32,26 +34,21 @@ class Holder {
     // **********************************************
 
     def execute(Closure block) {
-        Objectify ob = objectifyFactory.begin()
+        Objectify ob = ObjectifyService.ofy()
         block.delegate = ob
         return block.call()
     }
 
-    def inTransaction(Closure block) {
-        ObjectifyOpts opts = new ObjectifyOpts()
-        opts.sessionCache = false
-        opts.globalCache = true //used only for cleanup cached data
-        opts.beginTransaction = true
-        Objectify ob = objectifyFactory.begin(opts)
-        block.delegate = ob
-        try {
-            def x = block.call()
-            ob.txn.commit()
-            return x
-        } catch (Exception e) {
-            ob.txn.rollback()
-            throw e
+    def withTransaction(Closure block) {
+        Objectify ob = ObjectifyService.ofy()
+        Work work = new Work() {
+            @Override
+            Object run() {
+                block.delegate = ObjectifyService.ofy()
+                return block.call()
+            }
         }
+        return ob.transact(work)
     }
 
 

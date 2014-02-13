@@ -4,7 +4,7 @@
     <groupId>com.the6hours</groupId>
     <artifactId>garfa</artifactId>
     <packaging>jar</packaging>
-    <version>0.6</version>
+    <version>0.7-SNAPSHOT</version>
     <name>Garfa</name>
     <url>https://github.com/splix/garfa</url>
 
@@ -33,7 +33,7 @@
     </developers>
 
     <properties>
-        <gae.version>1.7.5</gae.version>
+        <gae.version>1.8.9</gae.version>
         <gae.wait>true</gae.wait>
         <slf4j>1.5.8</slf4j>
         <gmaven.version>1.4</gmaven.version>
@@ -53,7 +53,7 @@
         <dependency>
             <groupId>com.googlecode.objectify</groupId>
             <artifactId>objectify</artifactId>
-            <version>3.1</version>
+            <version>4.0</version>
         </dependency>
 
         <dependency>

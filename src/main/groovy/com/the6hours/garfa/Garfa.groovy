@@ -14,6 +14,13 @@ class Garfa {
     GarfaFindDsl  findDsl = new GarfaFindDsl()
     GarfaDynamicFindDsl dynamicFindDsl = new GarfaDynamicFindDsl()
 
+    static final Map defaults = [
+            'get'    : [safe: true],
+            'save'   : [flush: true],
+            'delete' : [flush: true],
+            'update' : []
+    ]
+
     Garfa() {
     }
 
@@ -41,5 +48,15 @@ class Garfa {
 
     void setObjectifyFactory(ObjectifyFactory ofy) {
         Holder._objectifyFactory = ofy
+    }
+
+    static def defaultOption(String operation, String name) {
+        if (defaults.containsKey(operation)) {
+            Map options = defaults[operation]
+            if (options.containsKey(name)) {
+                return options[name]
+            }
+        }
+        return null
     }
 }

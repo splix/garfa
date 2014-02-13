@@ -2,13 +2,17 @@ Models
 -------
 ```groovy
 
+@Entity
 class CarModel {
 
     @Id
     Long id
 
+    @Index
     String vendor
+    @Index
     String model
+    @Index
     int year
 
     void beforeInsert() {
@@ -19,6 +23,7 @@ class CarModel {
 
 }
 
+@Entity
 class Car {
 
     @Id
@@ -26,7 +31,9 @@ class Car {
     @Parent
     Key<CarModel> model
 
+    @Index
     int price
+    @Index
     String color
 }
 ```
