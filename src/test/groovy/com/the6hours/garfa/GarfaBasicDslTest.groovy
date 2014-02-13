@@ -18,9 +18,7 @@ class GarfaBasicDslTest extends Specification {
 
     def setup() {
         ObjectifyFactory ofy = new ObjectifyFactory()
-        Garfa garfa = new Garfa(
-                objectifyFactory: ofy
-        )
+        Garfa garfa = new Garfa(ofy)
         [CarModel, Car].each {
              ofy.register(it)
              garfa.register(it)

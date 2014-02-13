@@ -1,6 +1,7 @@
 package com.the6hours.garfa
 
 import com.googlecode.objectify.ObjectifyFactory
+import com.the6hours.garfa.testmodels.Car
 import com.the6hours.spockappengine.WithGae
 import spock.lang.Specification
 import com.the6hours.garfa.testmodels.CarModel
@@ -15,10 +16,8 @@ class GarfaFindDslTest extends Specification {
 
     def setup() {
         ObjectifyFactory ofy = new ObjectifyFactory()
-        Garfa garfa = new Garfa(
-                objectifyFactory: ofy
-        )
-        [CarModel].each {
+        Garfa garfa = new Garfa(ofy)
+        [CarModel, Car].each {
              ofy.register(it)
              garfa.register(it)
         }
@@ -29,7 +28,7 @@ class GarfaFindDslTest extends Specification {
                     model: it,
                     year: 2000 + idx
             )
-            car.save()
+            car.save(flush: true)
         }
     }
 
