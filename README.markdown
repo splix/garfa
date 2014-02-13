@@ -1,6 +1,8 @@
 Garfa
 =====
 
+[![Build Status](https://travis-ci.org/splix/garfa.png?branch=master)](https://travis-ci.org/splix/garfa)
+
 Garfa - Groovy ActiveRecord for Google Appengine
 
 It's:
