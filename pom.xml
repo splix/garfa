@@ -171,13 +171,15 @@
                 </configuration>
            </plugin>
 
-	 </plugins>
+        </plugins>
     </build>
 
     <repositories>
         <repository>
-              <id>objectify-appengine</id>
-              <url>http://objectify-appengine.googlecode.com/svn/maven</url>
+            <id>the6hours-release</id>
+            <url>http://maven.the6hours.com/release</url>
+            <releases><enabled>true</enabled></releases>
+            <snapshots><enabled>false</enabled></snapshots>
         </repository>
     </repositories>
 
