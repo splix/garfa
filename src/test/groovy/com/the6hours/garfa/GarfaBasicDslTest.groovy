@@ -25,6 +25,31 @@ class GarfaBasicDslTest extends Specification {
         }
     }
 
+    def "Null key on a new entity"() {
+        setup:
+        CarModel m = new CarModel()
+        Car car = new Car()
+        when:
+        def act = m.key
+        then:
+        act == null
+        when:
+        act = car.key
+        then:
+        act == null
+    }
+
+    def "Correct key on entity with id"() {
+        setup:
+        CarModel m = new CarModel(id: 1)
+        when:
+        def act = m.key
+        then:
+        act instanceof Key
+        act.id == 1
+        act.name == null
+        act.kind == 'CarModel'
+    }
 
     def "Save car"() {
         setup:

@@ -34,11 +34,17 @@ class GarfaBasicDsl {
             if (parent) {
                 String parentField = parent.name
                 metaClass.getKey = {->
+                    if (delegate.id == null) {
+                        return null
+                    }
                     Key parentKey = delegate.getAt(parentField)
                     return Key.create(parentKey, dc, delegate.id)
                 }
             } else {
                 metaClass.getKey = {->
+                    if (delegate.id == null) {
+                        return null
+                    }
                     return Key.create(dc, delegate.id)
                 }
             }
