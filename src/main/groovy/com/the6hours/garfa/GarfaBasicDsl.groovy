@@ -160,10 +160,25 @@ class GarfaBasicDsl {
                     }
                 }
             } else if (id instanceof Iterable) {
-                Map loaded = Holder.current.execute {
-                    delegate.load().keys(id)
+                List keys = id.collect { x ->
+                    if (x instanceof Key) {
+                        return x
+                    } else if (x instanceof String) {
+                        return Key.create(dc, x)
+                    } else if (x instanceof Long) {
+                        return Key.create(dc, x)
+                    } else {
+                        // what to do?
+                        return null
+                    }
+                }.findAll { x ->
+                    x != null
                 }
-                return id.collect { loaded[it] }
+                Map loaded = Holder.current.execute {
+                    Objectify ob = delegate
+                    ob.load().keys(keys)
+                }
+                return keys.collect { loaded[it] }
             } else {
                 Holder.current.execute {
                     def loader = delegate.load().type(dc).id(id)

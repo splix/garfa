@@ -118,7 +118,7 @@ class GarfaBasicDslTest extends Specification {
             car3 == null
     }
 
-    def "Load cars list"() {
+    def "Load cars list by key"() {
         setup:
             CarModel car = new CarModel(
                     vendor: 'Vaz',
@@ -137,12 +137,29 @@ class GarfaBasicDslTest extends Specification {
             car3.save(flush: true)
             car2.delete(flush: true)
         when:
-            List<CarModel> cars = CarModel.load([car.key, car2.key, car3.key])
+            def cars = CarModel.load([car.key, car2.key, car3.key])
         then:
             cars != null
             cars.size() == 3
             cars*.model == ['2101', null, '2105']
     }
+
+    def "Load cars list by ids"() {
+        setup:
+        CarModel model1 = new CarModel(model: 'Ford')
+        model1.save(flush: true)
+        CarModel model2 = new CarModel(model: 'Dodge')
+        model2.save(flush: true)
+        CarModel model3 = new CarModel(model: 'Jeep')
+        model3.save(flush: true)
+        when:
+        def act = CarModel.get([model1.id, model3.id])
+        then:
+        act instanceof List
+        act.size() == 2
+        act*.model == ['Ford', 'Jeep']
+    }
+
 
     def "Update car"() {
         setup:
