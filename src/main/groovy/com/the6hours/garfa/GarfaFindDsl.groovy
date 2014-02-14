@@ -1,9 +1,8 @@
 package com.the6hours.garfa
 
 import com.google.appengine.api.datastore.Cursor
+import com.google.appengine.api.datastore.QueryResultIterable
 import com.googlecode.objectify.Objectify
-import com.googlecode.objectify.Query
-import com.googlecode.objectify.cmd.LoadType
 import com.googlecode.objectify.cmd.Query
 
 /**
@@ -104,7 +103,7 @@ class GarfaFindDsl {
         }
 
         metaClass.'static'.findFirstWhere = { Map query, Map params, Closure block ->
-            Iterator iter = delegate.iterWhere(query, params, block)
+            Iterator iter = delegate.iterateWhere(query, params, block)
             if (iter.hasNext()) {
                 return iter.next()
             }
@@ -125,12 +124,19 @@ class GarfaFindDsl {
         }
 
         metaClass.'static'.iterateByAncestor = { Object key ->
-            return delegate.findByAncestor(key, null)
+            return delegate.iterateByAncestor(key, null)
         }
         metaClass.'static'.iterateByAncestor = { Object key, Map params ->
+            return delegate.iterateByAncestor(key, null, null)
+        }
+        metaClass.'static'.iterateByAncestor = { Object key, Closure block ->
+            return delegate.iterateByAncestor(key, null, block)
+        }
+
+        metaClass.'static'.iterateByAncestor = { Object key, Map params, Closure block ->
             Holder.current.execute {
                 Objectify ob = delegate
-                LoadType q = ob.load().type(dc)
+                Query q = ob.load().type(dc)
                 if (params?.limit) {
                     q = q.limit(params.limit)
                 }
@@ -138,6 +144,13 @@ class GarfaFindDsl {
                     q = q.order(params.order)
                 }
                 q = q.ancestor(key)
+                if (block) {
+                    block.delegate = q
+                    def q2 = block.call()
+                    if (q2 && q2 instanceof QueryResultIterable) {
+                        return q2.iterator()
+                    }
+                }
                 return q.iterator()
             }
         }

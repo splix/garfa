@@ -14,6 +14,8 @@ import com.the6hours.garfa.testmodels.CarModel
 @WithGae
 class GarfaFindDslTest extends Specification {
 
+    List<CarModel> models
+
     def setup() {
         ObjectifyFactory ofy = new ObjectifyFactory()
         Garfa garfa = new Garfa(ofy)
@@ -22,6 +24,7 @@ class GarfaFindDslTest extends Specification {
              garfa.register(it)
         }
 
+        models = []
         ['2101', '2106', '2108', '2109'].eachWithIndex { String it, int idx ->
             CarModel car = new CarModel(
                     vendor: 'Vaz',
@@ -29,6 +32,7 @@ class GarfaFindDslTest extends Specification {
                     year: 2000 + idx
             )
             car.save(flush: true)
+            models << car
         }
     }
 
@@ -83,5 +87,59 @@ class GarfaFindDslTest extends Specification {
             cars.size() == 2
             cars[0].model == '2108'
             cars[1].model == '2109'
+    }
+
+    def "Iterate by ancestor using a filter"() {
+        setup:
+        CarModel model = models.first()
+        Car car1 = new Car(
+                model: model.key,
+                price: 10000
+        )
+        car1.save(flush: true)
+        Car car2 = new Car(
+                model: model.key,
+                price: 15000
+        )
+        car2.save(flush: true)
+        Car car3 = new Car(
+                model: model.key,
+                price: 20000
+        )
+        car3.save(flush: true)
+        when:
+        Iterator act = Car.iterateByAncestor(model.key) {
+            filter 'price <', 20000
+        }
+        then:
+        act.hasNext()
+        act.next().price == 10000
+        act.hasNext()
+        act.next().price == 15000
+        !act.hasNext()
+    }
+
+    def "Iterate by ancestor using sorting"() {
+        setup:
+        CarModel model = models.first()
+        Car car1 = new Car(
+                model: model.key,
+                price: 10000
+        )
+        car1.save(flush: true)
+        Car car2 = new Car(
+                model: model.key,
+                price: 15000
+        )
+        car2.save(flush: true)
+        Car car3 = new Car(
+                model: model.key,
+                price: 20000
+        )
+        car3.save(flush: true)
+        when:
+        Iterator act = Car.iterateByAncestor(model.key, [sort: 'price'])
+        then:
+        act.toList()*.price == [10000, 15000, 20000]
     }
 }
