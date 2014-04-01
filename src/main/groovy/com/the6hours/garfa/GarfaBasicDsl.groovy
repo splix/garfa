@@ -147,14 +147,20 @@ class GarfaBasicDsl {
         }
 
         metaClass.'static'.get = { def id, Map opts = [:] ->
-            assert id != null : "ID cannot be null"
-            assert id instanceof Key || id instanceof String || id instanceof Long || id instanceof Integer || id instanceof Iterable
-            if (id instanceof Integer) {
-                id = id.longValue()
-            }
             opts = opts ?: [:]
             if (opts.safe == null) {
                 opts.safe = Garfa.defaultOption('get', 'safe')
+            }
+            if (id == null) {
+                if (opts.safe) {
+                    throw IllegalArgumentException("ID cannot be null for Safe Get")
+                } else {
+                    return null
+                }
+            }
+            assert id instanceof Key || id instanceof String || id instanceof Long || id instanceof Integer || id instanceof Iterable
+            if (id instanceof Integer) {
+                id = id.longValue()
             }
             if (id instanceof Key) {
                 Holder.current.execute {
