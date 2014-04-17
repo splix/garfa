@@ -337,7 +337,8 @@ class GarfaBasicDslTest extends Specification {
             child != null
             child.id == car2.id
         when:
-            child = model.loadChild(Car, car1.id + car2.id)
+            long invalidId = car1.id + car2.id * 31
+            child = model.loadChild(Car, invalidId)
         then:
             child == null
     }
