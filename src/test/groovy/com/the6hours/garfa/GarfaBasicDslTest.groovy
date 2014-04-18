@@ -1,5 +1,6 @@
 package com.the6hours.garfa
 
+import com.googlecode.objectify.Objectify
 import com.the6hours.spockappengine.WithGae
 import spock.lang.Specification
 import com.googlecode.objectify.ObjectifyFactory
@@ -228,6 +229,44 @@ class GarfaBasicDslTest extends Specification {
             CarModel.__forTesting.beforeUpdate == 1
     }
 
+    def "Update by id"() {
+        setup:
+        CarModel car = new CarModel(
+                vendor: 'Vaz',
+                model: '2101'
+        )
+        car.save(flush: true)
+        when:
+        CarModel.update (car.id) {
+            model = '2108'
+        }
+        CarModel act = CarModel.get(car.id)
+        then:
+        act.model == '2108'
+    }
+
+    def "Error during update"() {
+        setup:
+        CarModel car = new CarModel(
+                vendor: 'Vaz',
+                model: '2101'
+        )
+        car.save(flush: true)
+        when:
+        def act = car.update (car.id) {
+            model = '2108'
+            throw new RuntimeException('test')
+        }
+        then:
+        act == null
+        RuntimeException e = thrown(RuntimeException)
+        e.message == 'test'
+        when:
+        CarModel curr = CarModel.get(car.id)
+        then:
+        curr.model == '2101'
+    }
+
     def "Find first"() {
         setup:
             CarModel car = new CarModel(
@@ -341,5 +380,23 @@ class GarfaBasicDslTest extends Specification {
             child = model.loadChild(Car, invalidId)
         then:
             child == null
+    }
+
+    def "Throw exception on empty ID for SAFE get"() {
+        when:
+        Car.get(null, [safe: true])
+        then:
+        IllegalArgumentException e = thrown(IllegalArgumentException)
+        e.message == 'ID cannot be null for Safe Get'
+    }
+
+    def "Run withObjectify"() {
+        when:
+        def act = Car.withObjectify {
+            return delegate
+        }
+        then:
+        act != null
+        act instanceof Objectify
     }
 }

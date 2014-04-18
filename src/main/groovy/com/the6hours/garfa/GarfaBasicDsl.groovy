@@ -23,9 +23,7 @@ class GarfaBasicDsl {
     void extend(Class dc) {
         def metaClass = dc.metaClass
 
-        if (dc.declaredMethods.find { it.name == 'getKey' }) {
-            log.info("Class $dc already contains .getKey() method")
-        } else {
+        if (!dc.declaredMethods.find { it.name == 'getKey' }) {
             Field parent = dc.declaredFields.find { f ->
                 f.declaredAnnotations.find { a ->
                     a.annotationType() == Parent
@@ -153,7 +151,7 @@ class GarfaBasicDsl {
             }
             if (id == null) {
                 if (opts.safe) {
-                    throw IllegalArgumentException("ID cannot be null for Safe Get")
+                    throw new IllegalArgumentException("ID cannot be null for Safe Get")
                 } else {
                     return null
                 }
