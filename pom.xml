@@ -33,7 +33,7 @@
     </developers>
 
     <properties>
-        <gae.version>1.8.9</gae.version>
+        <gae.version>1.9.3</gae.version>
         <gae.wait>true</gae.wait>
         <slf4j>1.5.8</slf4j>
         <gmaven.version>1.4</gmaven.version>
