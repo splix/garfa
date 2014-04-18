@@ -25,10 +25,9 @@ Use method `.withObjectify {}` of a model, this Closure will be called agains Ob
 do whatever you want:
 
 ```groovy
-CarModel.withObjectify {
+Key key = ....
+boolean loaded = CarModel.withObjectify {
   //all methods here are delegated directly to Objectify instance
-
-  //for example method get(...) going to be like ofy.get(...)
-  Driver d = get(Driver, 'john')
+   isLoaded(key)
 }
 ```

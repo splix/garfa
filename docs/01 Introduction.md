@@ -3,11 +3,11 @@ About Garfa
 
 Garfa - is Groovy ActiveRecord for Google Appengine
 
-It's a tiny wrapper around Objectify 4, and should work with any Groovy project for Appengine. It's pretty
- safe to use Garfa in your project, because all underlying work is done by well-tested Objectify, and
- if you have something very specific you could always dig down to Objectify.
+It's a tiny wrapper around Objectify 4, and should work with any Groovy project on Appengine. It's pretty
+ safe to use Garfa in your project, because all underlying work is done by Objectify, and
+ if you have something very specific you could always dig down to raw Objectify.
 
-Garfa extends your database models with methods for querying, storing and updating models for Appengine database.
+Garfa extends your database models with methods for querying, storing and updating models for Google Appengine Datastore.
 
 Download
 --------

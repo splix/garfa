@@ -1,8 +1,10 @@
-Initialization code
--------------------
+Initialization
+--------------
+
+You need to register classes through Garfa on app start.
 
 ```groovy
-ObjectifyFactory objectifyFactory = //... you have to init Objectify before Garfa
+ObjectifyFactory objectifyFactory = //... you need to have Objectify already configured there
 Garfa garfa = new Garfa(objectifyFactory)
 
 // Car and Dealer is our models
@@ -12,13 +14,10 @@ List<Class> models = [Car, Dealer]
 garfa.register(models)
 ```
 
-Use with Spring Framework
--------------------------
-
-### Init as a bean
+### Init as a Spring Framework bean
 
 If you have a Spring Framework app, you could easily initialize Objectify and Garfa with
-your Configuration class (for annotation based configuration). Like:
+your @Configuration class, like:
 
 ```groovy
 @Configuration
