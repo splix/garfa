@@ -5,15 +5,13 @@ Garfa
 
 Garfa - Groovy ActiveRecord for Google Appengine
 
-It's:
-
  * for Groovy project
  * for Google Appengine
  * based on Objectify
 
-Garfa extends you Groovy class with methods for querying, storing, updating you database.
+Garfa extends you Groovy class with methods for querying, storing, updating you Google Appengine Datastore.
 
-Latest stable version: 0.6
+Latest stable version: 0.7
 
 Docs: http://splix.github.io/garfa/
 
@@ -51,7 +49,7 @@ Maven dependency
 <dependency>
     <groupId>com.the6hours</groupId>
     <artifactId>garfa</artifactId>
-    <version>0.5</version>
+    <version>0.7</version>
 </dependency>
 ```
 
