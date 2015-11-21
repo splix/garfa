@@ -1,0 +1,92 @@
+apply plugin: 'java'
+apply plugin: 'groovy'
+apply plugin: 'maven'
+apply plugin: 'appengine'
+
+project.group = 'com.the6hours'
+project.version = '0.8-SNAPSHOT'
+project.description = 'Groovy ActiveRecord for Google Appengine. Based on Objectify'
+project.sourceCompatibility = '1.7'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven { url 'http://maven.the6hours.com/release' }
+    maven { url 'http://maven.the6hours.com/snapshot' }
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.google.appengine:gradle-appengine-plugin:' + gaeVersion
+    }
+}
+
+configurations {
+    deployerJars
+}
+
+dependencies {
+    appengineSdk 'com.google.appengine:appengine-java-sdk:' + gaeVersion
+    compile 'com.google.appengine:appengine-api-1.0-sdk:'+gaeVersion
+
+    compile 'org.codehaus.groovy:groovy-all:' + groovyVersion
+    compile 'com.googlecode.objectify:objectify:4.0'
+    compile 'javax.persistence:persistence-api:1.0'
+    compile 'org.slf4j:slf4j-log4j12:' + slf4jVersion
+
+    // ----- testing
+
+    testCompile 'com.google.appengine:appengine-testing:'+gaeVersion
+    testCompile 'com.google.appengine:appengine-api-stubs:'+gaeVersion
+
+    testCompile ('org.spockframework:spock-core:'+spockVersion) {
+        exclude group: 'org.codehaus.groovy'
+    }
+    testCompile ('com.the6hours:spock-appengine:0.1-SNAPSHOT') {
+        exclude group: 'com.google.appengine'
+        exclude group: 'org.codehaus.groovy'
+    }
+
+    testCompile 'org.mortbay.jetty:jetty:6.1.9'
+
+    deployerJars "org.springframework.build:aws-maven:5.0.0.RELEASE"
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            configuration = configurations.deployerJars
+            snapshotRepository(url: "s3://maven.the6hours.com/snapshot") {
+                //setup AWS_ACCESS_KEY_ID and AWS_SECRET_KEY env variables
+            }
+
+            pom.project {
+                name 'Garfa'
+                description project.description
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        distribution 'repo'
+                    }
+                }
+                developers {
+                    developer {
+                        id '1'
+                        name 'Igor Artamonov'
+                        email 'igor@artamonov.ru'
+                    }
+                }
+                scm {
+                    url 'git@github.com:splix/garfa.git'
+                    connection 'scm:git:git@github.com:splix/garfa.git'
+                }
+            }
+        }
+    }
+}
